@@ -182,8 +182,21 @@
         }
         .ring-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.9rem; font-weight: 700; font-family: var(--font-mono); }
 
-        /* QUIZ INTERFACE */
+        /* QUIZ INTERFACE & TIMERS */
         .quiz-container { max-width: 800px; margin: 0 auto; padding-bottom: 100px; }
+        
+        .timer-bg {
+            width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 6px; 
+            overflow: hidden; margin-bottom: 20px; position: relative;
+        }
+        .timer-fill {
+            height: 100%; background: var(--primary); width: 100%; 
+            transition: width 1s linear, background 0.3s;
+        }
+        /* Color shifts for timer */
+        .timer-fill.warning { background: var(--warning); }
+        .timer-fill.danger { background: var(--danger); }
+
         .question-text { font-size: 1.25rem; line-height: 1.6; font-weight: 600; margin-bottom: 25px; color: #fff; }
         
         .choice-btn {
@@ -192,6 +205,8 @@
             border-radius: 12px; color: var(--text-muted); cursor: pointer; transition: all 0.2s; position: relative;
         }
         .choice-btn:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); }
+        .choice-btn.disabled { pointer-events: none; opacity: 0.7; }
+        
         .choice-key { 
             width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.1); color: white;
             display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; margin-right: 15px; flex-shrink: 0;
@@ -403,7 +418,7 @@
                 </div>
 
                 <div id="view-quiz" class="hidden fade-in quiz-container">
-                    </div>
+                </div>
 
             </div>
         </main>
@@ -433,7 +448,13 @@
         let score = 0;
         let selectedCategory = '';
         let currentUserUID = null;
-        let userStats = {}; // Stores the local version of stats
+        let userStats = {};
+        
+        // Timer Variables
+        let questionTimerInterval;
+        let nextQuestionInterval;
+        const QUESTION_TIME_LIMIT = 30; // Seconds
+        const NEXT_TIME_LIMIT = 10;     // Seconds
 
         // --- AUTH LOGIC ---
         const loginEmail = document.getElementById('inp-email');
@@ -457,15 +478,14 @@
             try {
                 const userCred = await createUserWithEmailAndPassword(auth, regEmail.value, regPass.value);
                 
-                // CREATE USER DOC EXACTLY LIKE SCREENSHOT (Nested stats object)
                 await setDoc(doc(db, "users", userCred.user.uid), {
                     email: regEmail.value,
-                    gcashReference: regRef.value, // Matched screenshot
+                    gcashReference: regRef.value, 
                     status: "pending",
                     createdAt: new Date(),
                     activationDate: null,
                     expiryDate: null,
-                    stats: {} // Starts empty, will fill with ALL, Numerical, etc.
+                    stats: {} 
                 });
                 alert("Registration submitted! Please wait for approval.");
             } catch (error) {
@@ -488,7 +508,6 @@
                     const userData = userSnap.data();
                     
                     if (userData.status === 'active') {
-                        // LOAD STATS from Firestore into local memory
                         userStats = userData.stats || {};
                         
                         showView('app-layout');
@@ -527,6 +546,10 @@
         };
 
         window.navTo = (viewId) => {
+            // Stop timers when navigating away
+            clearInterval(questionTimerInterval);
+            clearInterval(nextQuestionInterval);
+
             ['view-dashboard', 'view-topics', 'view-count', 'view-quiz'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
@@ -592,6 +615,10 @@
         };
 
         function renderQuestion() {
+            // Stop any previous timers
+            clearInterval(questionTimerInterval);
+            clearInterval(nextQuestionInterval);
+
             const q = currentQuestions[currentIndex];
             const container = document.getElementById('view-quiz');
             
@@ -607,11 +634,16 @@
             });
 
             container.innerHTML = `
-                <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-size:0.8rem; color:var(--text-muted);">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.8rem; color:var(--text-muted);">
                     <span>Question ${currentIndex + 1} of ${currentQuestions.length}</span>
                     <span style="color:var(--primary);">Score: ${score}</span>
                 </div>
+                
                 <div class="card" style="padding:25px; margin-bottom:20px;">
+                    <div class="timer-bg">
+                        <div id="q-timer-fill" class="timer-fill"></div>
+                    </div>
+                    
                     <div style="font-size:0.7rem; color:var(--primary); margin-bottom:5px; text-transform:uppercase;">${q.category}</div>
                     <div class="question-text">${q.question}</div>
                     ${optionsHtml}
@@ -619,25 +651,77 @@
                 <div id="rationale-area"></div>
                 <button id="next-btn" class="btn btn-primary hidden" onclick="nextQuestion()" style="width:100%; margin-top:20px;">Next Question <i class='bx bx-right-arrow-alt'></i></button>
             `;
+
+            // Start the 30-second timer
+            startQuestionTimer();
+        }
+
+        function startQuestionTimer() {
+            let timeLeft = QUESTION_TIME_LIMIT;
+            const timerFill = document.getElementById('q-timer-fill');
+            
+            // Reset visuals
+            timerFill.style.width = '100%';
+            timerFill.className = 'timer-fill'; // reset colors
+
+            questionTimerInterval = setInterval(() => {
+                timeLeft--;
+                
+                // Update Width
+                const percentage = (timeLeft / QUESTION_TIME_LIMIT) * 100;
+                timerFill.style.width = `${percentage}%`;
+
+                // Update Color based on time left
+                if (timeLeft <= 10) {
+                    timerFill.classList.add('warning');
+                }
+                if (timeLeft <= 5) {
+                    timerFill.classList.add('danger');
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(questionTimerInterval);
+                    handleTimeUp(); // Treat as wrong/no answer
+                }
+            }, 1000);
+        }
+
+        function handleTimeUp() {
+            // Automatically mark as wrong (pass null as selected)
+            checkAnswer(null, null);
         }
 
         window.checkAnswer = (selected, btnElement) => {
+            // Stop the 30s timer immediately
+            clearInterval(questionTimerInterval);
+
             const buttons = document.querySelectorAll('.choice-btn');
+            // Disable all buttons
+            buttons.forEach(b => b.classList.add('disabled'));
+            // Remove onClick to prevent double submission
             buttons.forEach(b => b.onclick = null);
 
             const q = currentQuestions[currentIndex];
-            const isCorrect = selected === q.correct;
+            let isCorrect = false;
 
-            if (isCorrect) {
-                score++;
-                btnElement.classList.add('choice-correct');
-                confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+            if (selected) {
+                isCorrect = selected === q.correct;
+                if (isCorrect) {
+                    score++;
+                    btnElement.classList.add('choice-correct');
+                    confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+                } else {
+                    btnElement.classList.add('choice-wrong');
+                }
             } else {
-                btnElement.classList.add('choice-wrong');
-                buttons.forEach(b => {
-                    if(b.innerText.includes(q.correct)) b.classList.add('choice-correct');
-                });
+                // Time up scenario
+                // No button clicked, just highlight the correct one
             }
+
+            // Always highlight correct answer
+            buttons.forEach(b => {
+                if(b.innerText.includes(q.correct)) b.classList.add('choice-correct');
+            });
 
             document.getElementById('rationale-area').innerHTML = `
                 <div class="rationale-panel fade-in">
@@ -646,18 +730,39 @@
                 </div>
             `;
 
-            document.getElementById('next-btn').classList.remove('hidden');
-            
-            // --- CORE LOGIC FIX: DOUBLE UPDATE ---
-            // 1. Update the Actual Category (Even if mode is Mock/ALL)
-            // This ensures Numerical stats go up even inside Mock Exam
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.classList.remove('hidden');
+
+            // UPDATE STATS
             updateLocalStats(q.category, isCorrect);
-            
-            // 2. Always Update 'ALL' stats
             updateLocalStats('ALL', isCorrect);
+
+            // START AUTO NEXT TIMER (10 Seconds)
+            startNextQuestionTimer();
         };
 
+        function startNextQuestionTimer() {
+            let nextTimeLeft = NEXT_TIME_LIMIT;
+            const nextBtn = document.getElementById('next-btn');
+
+            // Initial text
+            nextBtn.innerHTML = `Next Question (${nextTimeLeft}s) <i class='bx bx-right-arrow-alt'></i>`;
+
+            nextQuestionInterval = setInterval(() => {
+                nextTimeLeft--;
+                if(nextTimeLeft > 0) {
+                    nextBtn.innerHTML = `Next Question (${nextTimeLeft}s) <i class='bx bx-right-arrow-alt'></i>`;
+                } else {
+                    clearInterval(nextQuestionInterval);
+                    nextQuestion();
+                }
+            }, 1000);
+        }
+
         window.nextQuestion = () => {
+            // Ensure timer stops if user clicked manually
+            clearInterval(nextQuestionInterval);
+            
             currentIndex++;
             if (currentIndex < currentQuestions.length) {
                 renderQuestion();
@@ -667,6 +772,9 @@
         };
 
         function showResults() {
+            clearInterval(questionTimerInterval);
+            clearInterval(nextQuestionInterval);
+            
             const percentage = Math.round((score / currentQuestions.length) * 100);
             document.getElementById('view-quiz').innerHTML = `
                 <div class="card" style="text-align:center; padding:40px;">
@@ -678,27 +786,19 @@
             `;
         }
 
-        // --- STATS LOGIC (Mirroring the Screenshot Structure) ---
+        // --- STATS LOGIC ---
         
         function updateLocalStats(cat, correct) {
-            // Ensure object exists for this category (e.g., stats.Numerical = {})
             if (!userStats[cat]) {
                 userStats[cat] = { total: 0, correct: 0 };
             }
-            
             userStats[cat].total++;
             if (correct) userStats[cat].correct++;
-            
-            // NOTE: This updates the 'userStats' variable in memory.
-            // We save it to Firebase at the end of the quiz.
         }
 
         window.saveAndExit = async () => {
             if(currentUserUID) {
                 try {
-                    // Update the user document. 
-                    // This puts the entire 'userStats' object into the 'stats' field in Firestore.
-                    // Result: stats: { ALL: {correct:126...}, Numerical: {correct:86...} }
                     await updateDoc(doc(db, "users", currentUserUID), {
                         stats: userStats
                     });
@@ -714,12 +814,10 @@
 
         window.loadStatsUI = () => {
             const stats = userStats; 
-            // Mapping keys to UI IDs. 
-            // Ensure your Firestore Data matches these keys (Numerical, Verbal, etc.)
             const cats = ['Numerical', 'Verbal', 'Analytical', 'GenInfo', 'Clerical', 'ALL'];
             
             cats.forEach(c => {
-                if(stats[c]) {
+                if(stats[c] && stats[c].total > 0) {
                     const pct = Math.round((stats[c].correct / stats[c].total) * 100) || 0;
                     const ring = document.getElementById(`ring-${c}`);
                     const txt = document.getElementById(`txt-${c}`);
@@ -737,7 +835,6 @@
                         }
                     }
                 } else {
-                    // Reset UI if no data
                     const ring = document.getElementById(`ring-${c}`);
                     const txt = document.getElementById(`txt-${c}`);
                     if(ring) {
