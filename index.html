@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>CSE REVIEWER | Civil Service Elite</title>
+    <title>CSE ELITE | Civil Service Reviewer</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,16 +14,16 @@
 
     <style>
         :root {
-            /* CIVIL SERVICE / GOV PALETTE (Blue & Gold) */
-            --bg-deep: #0f172a;        /* Slate 900 */
-            --bg-surface: #1e293b;     /* Slate 800 */
+            /* MODERN TECH PALETTE - CSE EDITION */
+            --bg-deep: #0f172a;        /* Dark Slate */
+            --bg-surface: #1e293b;     /* Slate */
             
-            --primary: #3b82f6;        /* Royal Blue */
-            --primary-dim: rgba(59, 130, 246, 0.1);
-            --primary-glow: rgba(59, 130, 246, 0.5);
+            --primary: #fbbf24;        /* Gold/Yellow (Gov Style) */
+            --primary-dim: rgba(251, 191, 36, 0.1);
+            --primary-glow: rgba(251, 191, 36, 0.5);
             
-            --secondary: #eab308;      /* Gold/Amber - for Excellence */
-            --accent: #f59e0b;         /* Orange */
+            --secondary: #3b82f6;      /* Blue */
+            --accent: #f43f5e;         /* Rose */
             
             --success: #10b981;        /* Emerald */
             --warning: #f59e0b;        /* Amber */
@@ -32,14 +32,14 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             
-            --glass-bg: rgba(30, 41, 59, 0.85);
+            --glass-bg: rgba(30, 41, 59, 0.75);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-highlight: rgba(255, 255, 255, 0.1);
+            --glass-highlight: rgba(255, 255, 255, 0.15);
             
             --font-main: "Inter", sans-serif;
             --font-mono: "JetBrains Mono", monospace;
             
-            --radius-md: 12px;
+            --radius-md: 16px;
         }
 
         /* RESET & BASE */
@@ -53,8 +53,8 @@
             overflow: hidden; 
             position: relative;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.15), transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(234, 179, 8, 0.08), transparent 20%);
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(251, 191, 36, 0.08), transparent 25%);
         }
 
         /* SCROLLBAR */
@@ -70,32 +70,31 @@
         /* GLASS CARD SYSTEM */
         .card { 
             background: var(--glass-bg); 
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border); 
             border-top: 1px solid var(--glass-highlight);
             border-radius: var(--radius-md); 
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
             position: relative;
             overflow: hidden;
         }
 
         /* BUTTONS */
         .btn { 
-            padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; 
+            padding: 12px 24px; border-radius: 12px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; 
             transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem;
-            position: relative; overflow: hidden; user-select: none; letter-spacing: 0.5px;
+            position: relative; overflow: hidden; user-select: none;
         }
         .btn:active { transform: scale(0.96); }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         
         .btn-primary { 
-            background: linear-gradient(135deg, var(--primary), #2563eb); 
+            background: linear-gradient(135deg, var(--primary), #d97706); 
             color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
             border: 1px solid rgba(255,255,255,0.1);
         }
-        .btn-primary:hover { filter: brightness(1.1); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5); }
+        .btn-primary:hover { filter: brightness(1.1); box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5); }
         
         .btn-outline { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--text-muted); }
         .btn-outline:hover { border-color: var(--primary); color: var(--text-main); background: var(--primary-dim); }
@@ -106,24 +105,24 @@
         /* INPUTS */
         .input-group { margin-bottom: 16px; position: relative; }
         .input { 
-            width: 100%; padding: 16px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); 
-            color: white; border-radius: 8px; font-family: inherit; transition: 0.3s; font-size: 0.95rem;
+            width: 100%; padding: 16px; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); 
+            color: white; border-radius: 12px; font-family: inherit; transition: 0.3s; font-size: 0.95rem;
         }
         .input::placeholder { color: rgba(255,255,255,0.3); }
-        .input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-dim); background: rgba(0,0,0,0.4); }
+        .input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-dim); background: rgba(0,0,0,0.6); }
 
         /* AUTH SCREEN */
         .auth-wrapper { 
             display: flex; height: 100vh; width: 100%; justify-content: center; align-items: center; 
-            background: radial-gradient(circle at center, rgba(30, 41, 59, 0.8) 0%, var(--bg-deep) 100%);
+            background: radial-gradient(circle at center, rgba(251, 191, 36, 0.1) 0%, var(--bg-deep) 70%);
             z-index: 100; position: fixed; inset: 0;
         }
-        .auth-card { width: 100%; max-width: 400px; padding: 40px 30px; border-top: 4px solid var(--primary); }
+        .auth-card { width: 100%; max-width: 400px; padding: 40px 30px; }
         .brand-logo { 
-            width: 80px; height: 80px; background: linear-gradient(135deg, var(--bg-surface), var(--bg-deep)); 
-            border: 1px solid var(--glass-border);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            font-size: 2.5rem; color: var(--secondary); margin: 0 auto 20px; box-shadow: 0 0 20px rgba(234, 179, 8, 0.1);
+            width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), #d97706); 
+            border-radius: 20px; display: flex; align-items: center; justify-content: center; 
+            font-size: 2.5rem; color: white; margin: 0 auto 20px; box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+            transform: rotate(-5deg);
         }
 
         /* APP LAYOUT */
@@ -131,27 +130,27 @@
         
         /* SIDEBAR */
         .sidebar { 
-            width: 260px; background: var(--bg-surface); border-right: 1px solid var(--glass-border); 
+            width: 260px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); 
             display: flex; flex-direction: column; z-index: 50; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .sidebar-header { padding: 30px; display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.2rem; letter-spacing: -0.5px; color: var(--text-main); }
-        .sidebar-header i { color: var(--secondary); font-size: 1.6rem; }
+        .sidebar-header { padding: 30px; display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.4rem; letter-spacing: -0.5px; }
+        .sidebar-header i { color: var(--primary); font-size: 1.6rem; }
         
         .nav-links { padding: 0 15px; flex: 1; }
         .nav-item { 
-            padding: 14px 20px; border-radius: 8px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 12px; 
-            margin-bottom: 5px; transition: 0.2s; font-weight: 500; font-size: 0.9rem;
+            padding: 14px 20px; border-radius: 10px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 12px; 
+            margin-bottom: 5px; transition: 0.2s; font-weight: 500; font-size: 0.95rem;
         }
         .nav-item i { font-size: 1.2rem; }
         .nav-item:hover { color: white; background: rgba(255,255,255,0.03); }
-        .nav-item.active { background: var(--primary-dim); color: var(--primary); font-weight: 600; border-left: 3px solid var(--primary); border-radius: 4px 8px 8px 4px; }
+        .nav-item.active { background: var(--primary-dim); color: var(--primary); font-weight: 600; }
 
         /* MAIN CONTENT */
-        .main { flex: 1; display: flex; flex-direction: column; position: relative; width: 100%; background: var(--bg-deep); }
+        .main { flex: 1; display: flex; flex-direction: column; position: relative; width: 100%; }
         
         .header { 
             height: 70px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; 
-            padding: 0 25px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); z-index: 40;
+            padding: 0 25px; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); z-index: 40;
         }
         
         .scroll-area { flex: 1; overflow-y: auto; padding: 25px; scroll-behavior: smooth; }
@@ -160,14 +159,14 @@
         .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
         
         .mastery-card {
-            grid-column: 1 / -1; background: linear-gradient(180deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
-            display: flex; align-items: center; justify-content: space-between; padding: 30px; border: 1px solid var(--glass-border);
+            grid-column: 1 / -1; background: linear-gradient(180deg, rgba(251, 191, 36, 0.05), rgba(15, 23, 42, 0.6));
+            display: flex; align-items: center; justify-content: space-between; padding: 30px;
         }
         @media (max-width: 768px) { .mastery-card { flex-direction: column-reverse; text-align: center; gap: 20px; } }
 
         .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
         .cat-card {
-            background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 12px; padding: 20px;
+            background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px;
             text-align: center; transition: 0.3s; cursor: default;
         }
         .cat-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.04); border-color: var(--primary-glow); }
@@ -185,17 +184,17 @@
 
         /* QUIZ INTERFACE */
         .quiz-container { max-width: 800px; margin: 0 auto; padding-bottom: 100px; }
-        .question-text { font-size: 1.15rem; line-height: 1.6; font-weight: 500; margin-bottom: 25px; color: #fff; font-family: 'Inter', sans-serif; }
+        .question-text { font-size: 1.25rem; line-height: 1.6; font-weight: 600; margin-bottom: 25px; color: #fff; }
         
         .choice-btn {
-            display: flex; align-items: center; width: 100%; text-align: left; padding: 16px 20px;
+            display: flex; align-items: center; width: 100%; text-align: left; padding: 18px 20px;
             margin-bottom: 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border);
-            border-radius: 8px; color: var(--text-muted); cursor: pointer; transition: all 0.2s; position: relative;
+            border-radius: 12px; color: var(--text-muted); cursor: pointer; transition: all 0.2s; position: relative;
         }
         .choice-btn:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); }
         .choice-key { 
-            width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.1); color: white;
-            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; margin-right: 15px; flex-shrink: 0;
+            width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.1); color: white;
+            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; margin-right: 15px; flex-shrink: 0;
         }
 
         .choice-correct { background: rgba(16, 185, 129, 0.1) !important; border-color: var(--success) !important; color: white !important; }
@@ -206,11 +205,11 @@
 
         /* RATIONALE BOX */
         .rationale-panel {
-            margin-top: 30px; background: #0f1c30; border: 1px solid var(--glass-border); border-left: 4px solid var(--secondary);
-            border-radius: 8px; overflow: hidden; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+            margin-top: 30px; background: #0f1c30; border: 1px solid var(--primary-dim); border-left: 4px solid var(--primary);
+            border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
         }
         .rationale-timer-bar {
-            background: rgba(255,255,255,0.02); padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);
+            background: rgba(251, 191, 36, 0.05); padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);
             display: flex; justify-content: space-between; align-items: center;
         }
         .rationale-content { padding: 25px; line-height: 1.7; font-size: 0.95rem; color: #cbd5e1; }
@@ -227,7 +226,7 @@
         }
 
         .loader {
-            width: 48px; height: 48px; border: 3px solid #FFF; border-bottom-color: var(--secondary);
+            width: 48px; height: 48px; border: 3px solid #FFF; border-bottom-color: var(--primary);
             border-radius: 50%; display: inline-block; box-sizing: border-box;
             animation: rotation 1s linear infinite;
         }
@@ -239,50 +238,78 @@
     <div id="view-auth" class="auth-wrapper fade-in">
         <div id="form-login" class="card auth-card">
             <div class="brand-logo"><i class='bx bxs-institution'></i></div>
-            <h2 style="text-align: center; margin-bottom: 5px;">CSE REVIEWER</h2>
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px; font-size: 0.9rem;">Civil Service Exam Reviewer</p>
+            <h2 style="text-align: center; margin-bottom: 5px;">CSE ELITE</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px; font-size: 0.9rem;">Civil Service Reviewer Portal</p>
             
-            <div class="input-group"><input type="email" id="inp-email" class="input" placeholder="Email Address"></div>
-            <div class="input-group"><input type="password" id="inp-pass" class="input" placeholder="Password"></div>
+            <div class="input-group"><input type="email" id="inp-email" class="input" placeholder="Enter Email"></div>
+            <div class="input-group"><input type="password" id="inp-pass" class="input" placeholder="Enter Password"></div>
             
-            <button id="btn-login" class="btn btn-primary" style="width: 100%; margin-top: 10px;">ENTER REVIEWER <i class='bx bx-right-arrow-alt'></i></button>
+            <button id="btn-login" class="btn btn-primary" style="width: 100%; margin-top: 10px;">SECURE LOGIN <i class='bx bx-log-in-circle'></i></button>
             <div style="text-align: center; margin-top: 20px;">
-                <span id="link-to-register" class="btn-ghost" style="font-size: 0.8rem; cursor: pointer;">New Applicant? Register</span>
+                <span class="btn-ghost" onclick="toggleAuthMode()" style="font-size: 0.8rem; cursor: pointer;">Create an Account</span>
             </div>
             <div id="login-msg" style="text-align:center; margin-top:15px; color:var(--danger); font-size:0.8rem;"></div>
         </div>
 
         <div id="form-register" class="card auth-card hidden">
-            <h2 style="text-align: center; margin-bottom: 5px; color: var(--success);">APPLICANT REGISTRATION</h2>
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Create your account</p>
-            
+            <h2 style="text-align: center; margin-bottom: 5px; color: var(--success);">REGISTER</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Step 1: Send GCash Payment</p>
+             <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">CSE Subscription: 90 days</p>
+            <div style="background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 8px; border: 1px dashed var(--success); margin-bottom: 20px;">
+                <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--success); font-weight: bold;">Send to GCash</div>
+                <div style="font-size: 1.2rem; font-family: var(--font-mono); color: white; margin: 5px 0;">0948 374 8304</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Name: A...LO</div>
+            </div>
+
             <div class="input-group"><input type="email" id="reg-email" class="input" placeholder="Email Address"></div>
             <div class="input-group"><input type="password" id="reg-pass" class="input" placeholder="Password (Min 6 chars)"></div>
+            <div class="input-group"><input type="text" id="reg-ref" class="input" placeholder="GCash Reference No." style="border-color: var(--success);"></div>
             
-            <button id="btn-register" class="btn btn-primary" style="width: 100%; background: var(--success); color: #000;">COMPLETE REGISTRATION</button>
+            <button id="btn-register" class="btn btn-primary" style="width: 100%; background: var(--success); color: #000;">SUBMIT REGISTRATION</button>
             <div style="text-align: center; margin-top: 20px;">
-                <span id="link-to-login" class="btn-ghost" style="font-size: 0.8rem; cursor: pointer;">Back to Login</span>
+                <span class="btn-ghost" onclick="toggleAuthMode()" style="font-size: 0.8rem; cursor: pointer;">Back to Login</span>
             </div>
             <div id="reg-msg" style="text-align:center; margin-top:15px; color:var(--warning); font-size:0.8rem;"></div>
         </div>
     </div>
 
+    <div id="view-pending" class="auth-wrapper fade-in hidden">
+        <div class="card auth-card" style="text-align: center; border-top: 4px solid var(--warning);">
+            <div style="font-size: 4rem; color: var(--warning); margin-bottom: 15px; text-shadow: 0 0 20px rgba(245, 158, 11, 0.4);">
+                <i class='bx bx-time-five fade-in'></i>
+            </div>
+            <h2 style="color: #fff; margin-bottom: 5px; font-weight: 700; letter-spacing: 1px;">APPROVAL PENDING</h2>
+            <p style="color: var(--warning); font-family: var(--font-mono); font-size: 0.8rem; margin-bottom: 25px;">STATUS: VERIFICATION IN PROGRESS</p>
+            
+            <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; margin-bottom: 25px; text-align: left;">
+                <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                    <i class='bx bx-info-circle' style="color: var(--primary);"></i> 
+                    We are currently validating your GCash payment reference. This usually takes <strong>1-24 hours</strong>.
+                </p>
+            </div>
+
+            <button id="btn-force-logout" class="btn btn-outline" style="width: 100%;">
+                <i class='bx bx-log-out'></i> Check Again Later (Logout)
+            </button>
+        </div>
+    </div>
+
     <div id="app-layout" class="layout hidden">
-        <div class="overlay" id="overlay"></div>
+        <div class="overlay" onclick="toggleSidebar()"></div>
         
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header"><i class='bx bxs-book-bookmark'></i> CSE MASTER</div>
+            <div class="sidebar-header"><i class='bx bxs-institution'></i> CSE PRO</div>
             <div class="nav-links">
-                <div class="nav-item active" data-target="dashboard"><i class='bx bxs-dashboard'></i> Dashboard</div>
-                <div class="nav-item" data-target="topics"><i class='bx bxs-brain'></i> Take Quiz</div>
-                <div class="nav-item" onclick="alert('Module available in next update!')"><i class='bx bxs-file-pdf'></i> Resources</div>
+                <div class="nav-item active" onclick="navTo('dashboard'); toggleSidebar()"><i class='bx bxs-dashboard'></i> Dashboard</div>
+                <div class="nav-item" onclick="navTo('topics'); toggleSidebar()"><i class='bx bxs-book-content'></i> Start Review</div>
             </div>
             <div style="padding: 20px;">
                 <div class="card" style="padding: 15px; background: rgba(0,0,0,0.2); border: none;">
-                    <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Access Level</div>
-                    <div style="display:flex; align-items:center; gap:6px; margin-top: 5px; color: var(--secondary); font-weight: 600; font-size: 0.85rem;">
-                        <span style="width:8px; height:8px; background:var(--secondary); border-radius:50%; box-shadow: 0 0 10px var(--secondary);"></span> Professional
+                    <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Subscription</div>
+                    <div style="display:flex; align-items:center; gap:6px; margin-top: 5px; color: var(--success); font-weight: 600; font-size: 0.85rem;">
+                        <span style="width:8px; height:8px; background:var(--success); border-radius:50%; box-shadow: 0 0 10px var(--success);"></span> Active
                     </div>
+                    <div id="days-remaining" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px;">Checking...</div>
                 </div>
             </div>
         </aside>
@@ -290,14 +317,14 @@
         <main class="main">
             <header class="header">
                 <div style="display: flex; align-items: center; gap: 15px;">
-                    <button class="menu-toggle" id="menu-toggle"><i class='bx bx-menu'></i></button>
-                    <h3 id="page-title" style="margin: 0; font-weight: 600;">Dashboard</h3>
+                    <button class="menu-toggle" onclick="toggleSidebar()"><i class='bx bx-menu'></i></button>
+                    <h3 id="page-title" style="margin: 0;">Dashboard</h3>
                 </div>
                 <div style="display: flex; align-items: center; gap: 15px;">
                     <div style="text-align: right;" class="hidden-xs">
-                        <div id="user-email-display" style="font-size: 0.9rem; font-weight: 600;">Loading...</div>
+                        <div id="user-name" style="font-size: 0.9rem; font-weight: 600;">Candidate</div>
                     </div>
-                    <div style="width: 35px; height: 35px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;">PH</div>
+                    <div style="width: 35px; height: 35px; background: linear-gradient(to right, var(--primary), #d97706); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;">CS</div>
                     <button id="btn-logout" class="btn btn-ghost" style="padding: 8px;"><i class='bx bx-power-off' style="font-size: 1.2rem;"></i></button>
                 </div>
             </header>
@@ -306,111 +333,72 @@
                 
                 <div id="view-loading" class="hidden" style="height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     <span class="loader"></span>
-                    <p style="margin-top: 20px; color: var(--text-muted); font-family: var(--font-mono); letter-spacing: 2px; font-size: 0.8rem;">SYNCING DATABASE...</p>
+                    <p style="margin-top: 20px; color: var(--text-muted); font-family: var(--font-mono); letter-spacing: 2px; font-size: 0.8rem;">LOADING SYSTEM DATA...</p>
                 </div>
 
                 <div id="view-dashboard" class="fade-in">
                     <div class="stat-grid">
                         <div class="card mastery-card">
                             <div>
-                                <h4 style="color: var(--secondary); font-family: var(--font-mono); letter-spacing: 1px; margin-bottom: 8px;">EXAM READINESS</h4>
-                                <div id="txt-ALL" style="font-size: 4rem; font-weight: 800; line-height: 1; letter-spacing: -2px; color: white;">0%</div>
-                                <div style="color: var(--text-muted); margin-top: 5px; font-size: 0.9rem;">Sessions Completed: <span id="ans-ALL" style="color: white; font-weight: 700;">0</span></div>
+                                <h4 style="color: var(--primary); font-family: var(--font-mono); letter-spacing: 1px; margin-bottom: 8px;">OVERALL MASTERY</h4>
+                                <div id="txt-ALL" style="font-size: 4rem; font-weight: 800; line-height: 1; letter-spacing: -2px; text-shadow: 0 0 30px rgba(251, 191, 36, 0.4);">0%</div>
+                                <div style="color: var(--text-muted); margin-top: 5px; font-size: 0.9rem;">Total Questions Answered: <span id="ans-ALL" style="color: white; font-weight: 700;">0</span></div>
                                 <div style="margin-top: 25px;">
-                                    <button id="btn-start-now" class="btn btn-primary">Start Review Session <i class='bx bx-right-arrow-alt'></i></button>
+                                    <button onclick="navTo('topics')" class="btn btn-primary">Start New Session <i class='bx bx-right-arrow-alt'></i></button>
                                 </div>
                             </div>
                             <div style="position: relative; width: 180px; height: 180px;">
                                 <svg width="180" height="180" style="transform: rotate(-90deg);">
+                                    <defs>
+                                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:var(--primary);stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                                        </linearGradient>
+                                    </defs>
                                     <circle cx="90" cy="90" r="80" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="15" />
-                                    <circle id="ring-ALL" cx="90" cy="90" r="80" fill="none" stroke="var(--primary)" stroke-width="15" stroke-dasharray="502" stroke-dashoffset="502" stroke-linecap="round" style="filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.4)); transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);"/>
+                                    <circle id="ring-ALL" cx="90" cy="90" r="80" fill="none" stroke="url(#grad1)" stroke-width="15" stroke-dasharray="502" stroke-dashoffset="502" stroke-linecap="round" style="filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.4)); transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);"/>
                                 </svg>
-                                <i class='bx bxs-award' style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3.5rem; color: var(--secondary);"></i>
+                                <i class='bx bxs-medal' style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3.5rem; color: rgba(255,255,255,0.8);"></i>
                             </div>
                         </div>
                     </div>
 
                     <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
-                        <h4 style="font-weight: 600; font-size: 1.1rem;">Subject Proficiency</h4>
+                        <h4 style="font-weight: 600; font-size: 1.1rem;">Subject Breakdown</h4>
+                        <button onclick="resetStats()" class="btn btn-ghost" style="font-size: 0.75rem; padding: 6px 12px;"><i class='bx bx-reset'></i> Reset Stats</button>
                     </div>
 
                     <div class="category-grid">
-                        <div class="cat-card">
-                            <div class="ring-container">
-                                <svg class="ring-svg"><circle class="ring-circle-bg" cx="40" cy="40" r="35"></circle><circle id="ring-VERBAL" class="ring-circle-val" cx="40" cy="40" r="35" style="--c-color: #3b82f6;"></circle></svg>
-                                <div class="ring-text" id="txt-VERBAL">0%</div>
-                            </div>
-                            <div style="font-weight:700; color:#3b82f6;">Verbal</div>
-                            <div style="font-size:0.75rem; color:var(--text-muted);">Grammar & Reading</div>
-                        </div>
-                        <div class="cat-card">
-                            <div class="ring-container">
-                                <svg class="ring-svg"><circle class="ring-circle-bg" cx="40" cy="40" r="35"></circle><circle id="ring-NUMERICAL" class="ring-circle-val" cx="40" cy="40" r="35" style="--c-color: #eab308;"></circle></svg>
-                                <div class="ring-text" id="txt-NUMERICAL">0%</div>
-                            </div>
-                            <div style="font-weight:700; color:#eab308;">Numerical</div>
-                            <div style="font-size:0.75rem; color:var(--text-muted);">Math & Logic</div>
-                        </div>
-                        <div class="cat-card">
-                            <div class="ring-container">
-                                <svg class="ring-svg"><circle class="ring-circle-bg" cx="40" cy="40" r="35"></circle><circle id="ring-ANALYTICAL" class="ring-circle-val" cx="40" cy="40" r="35" style="--c-color: #10b981;"></circle></svg>
-                                <div class="ring-text" id="txt-ANALYTICAL">0%</div>
-                            </div>
-                            <div style="font-weight:700; color:#10b981;">Analytical</div>
-                            <div style="font-size:0.75rem; color:var(--text-muted);">Analysis & Abstract</div>
-                        </div>
-                        <div class="cat-card">
-                            <div class="ring-container">
-                                <svg class="ring-svg"><circle class="ring-circle-bg" cx="40" cy="40" r="35"></circle><circle id="ring-GENINFO" class="ring-circle-val" cx="40" cy="40" r="35" style="--c-color: #ef4444;"></circle></svg>
-                                <div class="ring-text" id="txt-GENINFO">0%</div>
-                            </div>
-                            <div style="font-weight:700; color:#ef4444;">Gen. Info</div>
-                            <div style="font-size:0.75rem; color:var(--text-muted);">Consti & Current Events</div>
-                        </div>
+                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="40" cy="40" r="35"></circle><circle id="ring-Numerical" class="ring-circle-val" cx="40" cy="40" r="35" style="--c-color: var(--success);"></circle></svg><div class="ring-text" id="txt-Numerical">0%</div></div><div style="font-weight:700; color:var(--success);">Numerical</div><div style="font-size:0.75rem; color:var(--text-muted);">Math & Logic</div></div>
+                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="40" cy="40" r="35"></circle><circle id="ring-Verbal" class="ring-circle-val" cx="40" cy="40" r="35" style="--c-color: var(--warning);"></circle></svg><div class="ring-text" id="txt-Verbal">0%</div></div><div style="font-weight:700; color:var(--warning);">Verbal</div><div style="font-size:0.75rem; color:var(--text-muted);">Grammar & Vocab</div></div>
+                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="40" cy="40" r="35"></circle><circle id="ring-Analytical" class="ring-circle-val" cx="40" cy="40" r="35" style="--c-color: var(--secondary);"></circle></svg><div class="ring-text" id="txt-Analytical">0%</div></div><div style="font-weight:700; color:var(--secondary);">Analytical</div><div style="font-size:0.75rem; color:var(--text-muted);">Problem Solving</div></div>
+                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="40" cy="40" r="35"></circle><circle id="ring-GenInfo" class="ring-circle-val" cx="40" cy="40" r="35" style="--c-color: var(--accent);"></circle></svg><div class="ring-text" id="txt-GenInfo">0%</div></div><div style="font-weight:700; color:var(--accent);">Gen Info</div><div style="font-size:0.75rem; color:var(--text-muted);">Constitution/Laws</div></div>
+                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="40" cy="40" r="35"></circle><circle id="ring-Clerical" class="ring-circle-val" cx="40" cy="40" r="35" style="--c-color: var(--danger);"></circle></svg><div class="ring-text" id="txt-Clerical">0%</div></div><div style="font-weight:700; color:var(--danger);">Clerical</div><div style="font-size:0.75rem; color:var(--text-muted);">Sub-Professional</div></div>
                     </div>
                 </div>
 
                 <div id="view-topics" class="hidden fade-in">
-                    <h2 style="margin-bottom: 20px; font-weight: 300;">Select <span style="font-weight:800; color:var(--primary);">Subject</span></h2>
+                    <h2 style="margin-bottom: 20px; font-weight: 300;">Choose <span style="font-weight:800; color:var(--primary);">Subject</span></h2>
                     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;">
-                        <button class="card topic-btn" data-topic="VERBAL" style="padding: 30px; text-align: left; transition: 0.3s; cursor:pointer;">
-                            <i class='bx bxs-book-open' style="font-size: 2.5rem; color: #3b82f6; margin-bottom: 15px;"></i>
-                            <h3>Verbal</h3>
-                            <p style="font-size: 0.8rem; color: var(--text-muted);">Vocabulary, Grammar, Reading Comprehension</p>
-                        </button>
-                        <button class="card topic-btn" data-topic="NUMERICAL" style="padding: 30px; text-align: left; transition: 0.3s; cursor:pointer;">
-                            <i class='bx bxs-calculator' style="font-size: 2.5rem; color: #eab308; margin-bottom: 15px;"></i>
-                            <h3>Numerical</h3>
-                            <p style="font-size: 0.8rem; color: var(--text-muted);">Basic Operations, Word Problems, Ratio & Proportion</p>
-                        </button>
-                        <button class="card topic-btn" data-topic="ANALYTICAL" style="padding: 30px; text-align: left; transition: 0.3s; cursor:pointer;">
-                            <i class='bx bxs-analyse' style="font-size: 2.5rem; color: #10b981; margin-bottom: 15px;"></i>
-                            <h3>Analytical</h3>
-                            <p style="font-size: 0.8rem; color: var(--text-muted);">Logical Reasoning, Data Interpretation, Abstract</p>
-                        </button>
-                        <button class="card topic-btn" data-topic="GENINFO" style="padding: 30px; text-align: left; transition: 0.3s; cursor:pointer;">
-                            <i class='bx bxs-flag-alt' style="font-size: 2.5rem; color: #ef4444; margin-bottom: 15px;"></i>
-                            <h3>Gen. Info</h3>
-                            <p style="font-size: 0.8rem; color: var(--text-muted);">Constitution, RA 6713, Peace, Human Rights, Environment</p>
-                        </button>
-                        <button class="card topic-btn" data-topic="ALL" style="padding: 30px; text-align: left; transition: 0.3s; cursor:pointer; border-color: var(--secondary);">
-                            <i class='bx bxs-graduation' style="font-size: 2.5rem; color: var(--secondary); margin-bottom: 15px;"></i>
-                            <h3>MOCK EXAM</h3>
-                            <p style="font-size: 0.8rem; color: var(--text-muted);">Randomized questions from all subjects</p>
-                        </button>
+                        <button onclick="selectTopic('Numerical')" class="card" style="padding: 30px; text-align: left; transition: 0.3s; cursor:pointer;"><i class='bx bxs-calculator' style="font-size: 2.5rem; color: var(--success); margin-bottom: 15px;"></i><h3>Numerical</h3><p style="font-size: 0.8rem; color: var(--text-muted);">Basic Operations & Word Problems</p></button>
+                        <button onclick="selectTopic('Verbal')" class="card" style="padding: 30px; text-align: left; transition: 0.3s; cursor:pointer;"><i class='bx bxs-book' style="font-size: 2.5rem; color: var(--warning); margin-bottom: 15px;"></i><h3>Verbal</h3><p style="font-size: 0.8rem; color: var(--text-muted);">Grammar, Reading, Vocab</p></button>
+                        <button onclick="selectTopic('Analytical')" class="card" style="padding: 30px; text-align: left; transition: 0.3s; cursor:pointer;"><i class='bx bxs-brain' style="font-size: 2.5rem; color: var(--secondary); margin-bottom: 15px;"></i><h3>Analytical</h3><p style="font-size: 0.8rem; color: var(--text-muted);">Logic & Pattern Recognition</p></button>
+                        <button onclick="selectTopic('GenInfo')" class="card" style="padding: 30px; text-align: left; transition: 0.3s; cursor:pointer;"><i class='bx bxs-flag-alt' style="font-size: 2.5rem; color: var(--accent); margin-bottom: 15px;"></i><h3>Gen Info</h3><p style="font-size: 0.8rem; color: var(--text-muted);">Phil. Const. & Current Events</p></button>
+                        <button onclick="selectTopic('Clerical')" class="card" style="padding: 30px; text-align: left; transition: 0.3s; cursor:pointer;"><i class='bx bxs-file-doc' style="font-size: 2.5rem; color: var(--danger); margin-bottom: 15px;"></i><h3>Clerical</h3><p style="font-size: 0.8rem; color: var(--text-muted);">Filing & Office Procedures</p></button>
+                        <button onclick="selectTopic('ALL')" class="card" style="padding: 30px; text-align: left; transition: 0.3s; cursor:pointer; border-color: var(--primary);"><i class='bx bxs-layer' style="font-size: 2.5rem; color: var(--primary); margin-bottom: 15px;"></i><h3>Mock Exam</h3><p style="font-size: 0.8rem; color: var(--text-muted);">Comprehensive Mixed Test</p></button>
                     </div>
                 </div>
 
                 <div id="view-count" class="hidden fade-in" style="max-width: 500px; margin: 0 auto;">
-                    <button id="btn-back-topics" class="btn btn-ghost" style="margin-bottom: 20px;"><i class='bx bx-arrow-back'></i> Back</button>
+                    <button onclick="navTo('topics')" class="btn btn-ghost" style="margin-bottom: 20px;"><i class='bx bx-arrow-back'></i> Back</button>
                     <div class="card" style="padding: 40px; text-align: center;">
-                        <h2 style="margin-bottom: 10px;">Exam Configuration</h2>
-                        <p style="color: var(--text-muted); margin-bottom: 30px;">Select the number of items for this session.</p>
+                        <h2 style="margin-bottom: 10px;">Exam Settings</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 30px;">How many questions do you want to tackle?</p>
                         <div style="display: grid; gap: 15px;">
-                            <button class="btn btn-outline count-btn" data-count="5" style="justify-content: space-between;">5 Items (Quick) <i class='bx bx-chevron-right'></i></button>
-                            <button class="btn btn-outline count-btn" data-count="10" style="justify-content: space-between;">10 Items <i class='bx bx-chevron-right'></i></button>
-                            <button class="btn btn-outline count-btn" data-count="20" style="justify-content: space-between;">20 Items <i class='bx bx-chevron-right'></i></button>
-                            <button class="btn btn-outline count-btn" data-count="50" style="justify-content: space-between; border-color: var(--primary);">50 Items (Standard) <i class='bx bx-chevron-right'></i></button>
+                            <button onclick="startQuiz(10)" class="btn btn-outline" style="justify-content: space-between;">10 Items <i class='bx bx-chevron-right'></i></button>
+                            <button onclick="startQuiz(20)" class="btn btn-outline" style="justify-content: space-between;">20 Items <i class='bx bx-chevron-right'></i></button>
+                            <button onclick="startQuiz(50)" class="btn btn-outline" style="justify-content: space-between;">50 Items <i class='bx bx-chevron-right'></i></button>
+                            <button onclick="startQuiz(100)" class="btn btn-outline" style="justify-content: space-between; border-color: var(--primary);">100 Items <i class='bx bx-chevron-right'></i></button>
                         </div>
                     </div>
                 </div>
@@ -423,12 +411,11 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, getDocs, query, where, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDoc, getDocs, doc, setDoc, query, where, limit } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-        // --- FIREBASE CONFIGURATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyBY4msSow0k_2iP0IJeMZH8Qbzdj5lXeAo",
             authDomain: "csereviewer-fef62.firebaseapp.com",
@@ -440,313 +427,301 @@
         };
 
         const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const analytics = getAnalytics(app);
 
-        // --- STATE MANAGEMENT ---
-        let currentSession = {
-            topic: null,
-            limit: 10,
-            questions: [],
-            index: 0,
-            score: 0
-        };
+        // --- GLOBAL STATE ---
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let score = 0;
+        let selectedCategory = '';
 
         // --- AUTH LOGIC ---
-        const loginForm = document.getElementById('form-login');
-        const regForm = document.getElementById('form-register');
-        const authView = document.getElementById('view-auth');
-        const appView = document.getElementById('app-layout');
-        const userEmailDisplay = document.getElementById('user-email-display');
-
-        // Toggle Auth Screens
-        document.getElementById('link-to-register').addEventListener('click', () => {
-            loginForm.classList.add('hidden');
-            regForm.classList.remove('hidden');
-        });
-        document.getElementById('link-to-login').addEventListener('click', () => {
-            regForm.classList.add('hidden');
-            loginForm.classList.remove('hidden');
-        });
-
-        // Sign In
+        const loginEmail = document.getElementById('inp-email');
+        const loginPass = document.getElementById('inp-pass');
+        const regEmail = document.getElementById('reg-email');
+        const regPass = document.getElementById('reg-pass');
+        const regRef = document.getElementById('reg-ref');
+        
+        // Login
         document.getElementById('btn-login').addEventListener('click', async () => {
-            const email = document.getElementById('inp-email').value;
-            const pass = document.getElementById('inp-pass').value;
-            const msg = document.getElementById('login-msg');
-            const btn = document.getElementById('btn-login');
-
-            if(!email || !pass) { msg.innerText = "Please fill in all fields"; return; }
-            
             try {
-                btn.disabled = true;
-                btn.innerText = "Verifying...";
-                await signInWithEmailAndPassword(auth, email, pass);
-                // Listener handles redirect
+                await signInWithEmailAndPassword(auth, loginEmail.value, loginPass.value);
             } catch (error) {
-                btn.disabled = false;
-                btn.innerText = "ENTER REVIEWER";
-                msg.innerText = "Login Failed: " + error.message;
+                document.getElementById('login-msg').innerText = "Invalid Credentials. Please try again.";
             }
         });
 
         // Register
         document.getElementById('btn-register').addEventListener('click', async () => {
-            const email = document.getElementById('reg-email').value;
-            const pass = document.getElementById('reg-pass').value;
-            const msg = document.getElementById('reg-msg');
-            const btn = document.getElementById('btn-register');
-
-            if(!email || !pass) { msg.innerText = "Please fill in all fields"; return; }
-            if(pass.length < 6) { msg.innerText = "Password must be at least 6 characters"; return; }
-
+            if(regPass.value.length < 6) return document.getElementById('reg-msg').innerText = "Password too short.";
             try {
-                btn.disabled = true;
-                btn.innerText = "Creating Account...";
-                await createUserWithEmailAndPassword(auth, email, pass);
-                // Listener handles redirect
+                const userCred = await createUserWithEmailAndPassword(auth, regEmail.value, regPass.value);
+                // Create User Doc with Pending Status
+                await setDoc(doc(db, "users", userCred.user.uid), {
+                    email: regEmail.value,
+                    gcashRef: regRef.value,
+                    status: "pending",
+                    createdAt: new Date()
+                });
+                alert("Registration submitted! Please wait for approval.");
             } catch (error) {
-                btn.disabled = false;
-                btn.innerText = "COMPLETE REGISTRATION";
-                msg.innerText = "Error: " + error.message;
+                document.getElementById('reg-msg').innerText = error.message;
             }
         });
 
         // Logout
-        document.getElementById('btn-logout').addEventListener('click', () => {
-            signOut(auth);
-        });
+        window.forceLogout = () => signOut(auth);
+        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+        document.getElementById('btn-force-logout').addEventListener('click', () => signOut(auth));
 
-        // Auth Listener
-        onAuthStateChanged(auth, (user) => {
+        // Auth State Observer
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                authView.classList.add('hidden');
-                appView.classList.remove('hidden');
-                userEmailDisplay.innerText = user.email.split('@')[0];
-                updateDashboard();
+                // Check subscription status
+                const userSnap = await getDoc(doc(db, "users", user.uid));
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    if (userData.status === 'active') {
+                        showView('app-layout');
+                        document.getElementById('view-auth').classList.add('hidden');
+                        document.getElementById('view-pending').classList.add('hidden');
+                        document.getElementById('user-name').innerText = user.email.split('@')[0];
+                        loadStats();
+                    } else {
+                        showView('view-pending');
+                        document.getElementById('view-auth').classList.add('hidden');
+                    }
+                } else {
+                    // New user fix if logic fails
+                    showView('view-pending');
+                    document.getElementById('view-auth').classList.add('hidden');
+                }
             } else {
-                appView.classList.add('hidden');
-                authView.classList.remove('hidden');
-                loginForm.classList.remove('hidden');
-                regForm.classList.add('hidden');
-                // Reset fields
-                document.getElementById('inp-pass').value = '';
-                document.getElementById('btn-login').disabled = false;
-                document.getElementById('btn-login').innerHTML = "ENTER REVIEWER <i class='bx bx-right-arrow-alt'></i>";
+                showView('view-auth');
+                document.getElementById('app-layout').classList.add('hidden');
+                document.getElementById('view-pending').classList.add('hidden');
             }
         });
 
-        // --- NAVIGATION LOGIC ---
-        function navTo(viewId) {
-            document.querySelectorAll('#main-scroll > div').forEach(div => div.classList.add('hidden'));
-            document.getElementById(`view-${viewId}`).classList.remove('hidden');
-            
-            const titles = { 'dashboard': 'Dashboard', 'topics': 'Subject Selection', 'count': 'Settings', 'quiz': 'Ongoing Exam' };
-            document.getElementById('page-title').innerText = titles[viewId] || 'Reviewer';
+        // --- NAVIGATION & UI ---
+        window.toggleAuthMode = () => {
+            document.getElementById('form-login').classList.toggle('hidden');
+            document.getElementById('form-register').classList.toggle('hidden');
+        };
+
+        window.toggleSidebar = () => {
+            const sb = document.getElementById('sidebar');
+            const ov = document.querySelector('.overlay');
+            sb.classList.toggle('active');
+            ov.classList.toggle('active');
+        };
+
+        window.navTo = (viewId) => {
+            ['view-dashboard', 'view-topics', 'view-count', 'view-quiz'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById('view-' + viewId).classList.remove('hidden');
+            document.getElementById('page-title').innerText = viewId === 'dashboard' ? 'Dashboard' : 'Reviewer';
+        };
+
+        function showView(id) {
+            ['view-auth', 'view-pending', 'app-layout'].forEach(v => document.getElementById(v).classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
         }
 
-        // Sidebar interactions
-        document.querySelectorAll('.nav-item[data-target]').forEach(item => {
-            item.addEventListener('click', () => {
-                navTo(item.dataset.target);
-                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                item.classList.add('active');
-                if(window.innerWidth <= 900) toggleSidebar();
-            });
-        });
+        // --- QUIZ LOGIC ---
+        window.selectTopic = (topic) => {
+            selectedCategory = topic;
+            navTo('count');
+        };
 
-        document.getElementById('menu-toggle').addEventListener('click', toggleSidebar);
-        document.getElementById('overlay').addEventListener('click', toggleSidebar);
-        document.getElementById('btn-start-now').addEventListener('click', () => navTo('topics'));
-        document.getElementById('btn-back-topics').addEventListener('click', () => navTo('topics'));
+        window.startQuiz = async (limitCount) => {
+            document.getElementById('view-count').classList.add('hidden');
+            document.getElementById('view-loading').classList.remove('hidden');
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.querySelector('.overlay').classList.toggle('active');
-        }
-
-        // --- DASHBOARD LOGIC (Simplified Visuals) ---
-        function updateDashboard() {
-            // In a real app, fetch stats from Firebase User collection here
-            document.getElementById('txt-ALL').innerText = "0%"; // Placeholder
-            // Reset rings for now
-            ['ALL', 'VERBAL', 'NUMERICAL', 'ANALYTICAL', 'GENINFO'].forEach(id => {
-               // setRing(id, 0); // Implement ring logic if storing progress
-            });
-        }
-
-        // --- QUIZ LOGIC (FIRESTORE) ---
-
-        // 1. Topic Selection
-        document.querySelectorAll('.topic-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                currentSession.topic = btn.dataset.topic;
-                navTo('count');
-            });
-        });
-
-        // 2. Count Selection & Fetching
-        document.querySelectorAll('.count-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const count = parseInt(btn.dataset.count);
-                startQuiz(count);
-            });
-        });
-
-        async function startQuiz(count) {
-            navTo('loading');
-            currentSession.limit = count;
-            currentSession.score = 0;
-            currentSession.index = 0;
-            currentSession.questions = [];
+            // FETCH FROM FIREBASE
+            currentQuestions = [];
+            score = 0;
+            currentIndex = 0;
 
             try {
-                // Fetch from Firestore
-                const qRef = collection(db, "questions");
+                let qRef = collection(db, "questions");
                 let qQuery;
 
-                // Simple query strategy
-                if (currentSession.topic === 'ALL') {
-                    qQuery = query(qRef); 
+                if (selectedCategory === 'ALL') {
+                    // Firestore can't random easily, so we fetch a batch and shuffle client side
+                    qQuery = query(qRef, limit(limitCount * 2)); 
                 } else {
-                    qQuery = query(qRef, where("category", "==", currentSession.topic));
+                    qQuery = query(qRef, where("category", "==", selectedCategory), limit(limitCount));
                 }
 
-                // Note: Firestore doesn't support "Random" natively efficiently.
-                // We fetch all matching docs (or a reasonable limit) then shuffle client-side for this demo.
-                // For production with 1000s of qs, use a dedicated ID strategy.
-                
-                const snapshot = await getDocs(qQuery);
-                const allFetched = [];
-                
-                snapshot.forEach(doc => {
-                    allFetched.push({ id: doc.id, ...doc.data() });
+                const querySnapshot = await getDocs(qQuery);
+                querySnapshot.forEach((doc) => {
+                    currentQuestions.push({ id: doc.id, ...doc.data() });
                 });
 
-                if (allFetched.length === 0) {
-                    alert("No questions found in database for this category. Please check your Firestore 'questions' collection.");
+                // Shuffle
+                currentQuestions.sort(() => Math.random() - 0.5);
+                // Slice to exact limit
+                currentQuestions = currentQuestions.slice(0, limitCount);
+
+                if (currentQuestions.length === 0) {
+                    alert("No questions found for this category yet. Please try another.");
                     navTo('topics');
+                    document.getElementById('view-loading').classList.add('hidden');
                     return;
                 }
 
-                // Shuffle and Slice
-                currentSession.questions = allFetched.sort(() => 0.5 - Math.random()).slice(0, count);
-                
+                document.getElementById('view-loading').classList.add('hidden');
                 navTo('quiz');
                 renderQuestion();
 
             } catch (error) {
-                console.error("Error fetching questions:", error);
-                alert("Error loading quiz: " + error.message);
-                navTo('dashboard');
+                console.error(error);
+                alert("Error loading questions. Check your internet.");
+                navTo('topics');
+                document.getElementById('view-loading').classList.add('hidden');
             }
-        }
+        };
 
         function renderQuestion() {
-            const qContainer = document.getElementById('view-quiz');
-            const q = currentSession.questions[currentSession.index];
-            const qNum = currentSession.index + 1;
-            const total = currentSession.questions.length;
-
-            if (!q) {
-                showResults();
-                return;
-            }
-
-            let choicesHTML = '';
-            const letters = ['A','B','C','D', 'E'];
+            const q = currentQuestions[currentIndex];
+            const container = document.getElementById('view-quiz');
             
-            // Check if choices exist
-            if(q.choices && Array.isArray(q.choices)) {
-                q.choices.forEach((choice, i) => {
-                    choicesHTML += `
-                        <div class="choice-btn" data-index="${i}">
-                            <div class="choice-key">${letters[i]}</div>
-                            <div>${choice}</div>
-                        </div>
-                    `;
-                });
-            }
-
-            qContainer.innerHTML = `
-                <div style="display:flex; justify-content:space-between; color:var(--text-muted); margin-bottom:10px; font-size:0.8rem;">
-                    <span>Question ${qNum} of ${total}</span>
-                    <span>${currentSession.topic}</span>
-                </div>
-                <div class="question-text">${q.question || "Question text missing"}</div>
-                <div id="choices-area">${choicesHTML}</div>
-                
-                <div id="rationale-box" class="rationale-panel hidden fade-in">
-                    <div class="rationale-timer-bar">
-                        <span style="font-weight:700; color:var(--secondary);">EXPLANATION</span>
-                        <button id="btn-next-q" class="btn btn-primary" style="padding:6px 12px; font-size:0.8rem;">Next <i class='bx bx-right-arrow-alt'></i></button>
-                    </div>
-                    <div class="rationale-content">${q.rationale || "No rationale provided."}</div>
-                </div>
-            `;
-
-            // Attach Event Listeners to new elements
-            document.querySelectorAll('.choice-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    checkAnswer(parseInt(this.dataset.index), this);
-                });
+            // Build Options HTML
+            let optionsHtml = '';
+            q.options.forEach((opt, idx) => {
+                const letters = ['A', 'B', 'C', 'D'];
+                optionsHtml += `
+                    <button class="choice-btn" onclick="checkAnswer('${opt}', this)">
+                        <span class="choice-key">${letters[idx]}</span>
+                        ${opt}
+                    </button>
+                `;
             });
 
-            document.getElementById('btn-next-q').addEventListener('click', nextQuestion);
+            container.innerHTML = `
+                <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-size:0.8rem; color:var(--text-muted);">
+                    <span>Question ${currentIndex + 1} of ${currentQuestions.length}</span>
+                    <span style="color:var(--primary);">Score: ${score}</span>
+                </div>
+                <div class="card" style="padding:25px; margin-bottom:20px;">
+                    <div class="question-text">${q.question}</div>
+                    ${optionsHtml}
+                </div>
+                <div id="rationale-area"></div>
+                <button id="next-btn" class="btn btn-primary hidden" onclick="nextQuestion()" style="width:100%; margin-top:20px;">Next Question <i class='bx bx-right-arrow-alt'></i></button>
+            `;
         }
 
-        function checkAnswer(selectedIndex, btnElement) {
-            const q = currentSession.questions[currentSession.index];
-            const allBtns = document.querySelectorAll('.choice-btn');
-            
-            // Disable all clicks
-            allBtns.forEach(btn => btn.style.pointerEvents = 'none');
+        window.checkAnswer = (selected, btnElement) => {
+            // Disable all buttons
+            const buttons = document.querySelectorAll('.choice-btn');
+            buttons.forEach(b => b.onclick = null);
 
-            // Convert answer to index if stored as string/number mismatch
-            // Assuming database stores 'answer' as 0, 1, 2, 3 (Number)
-            let correctIndex = q.answer;
+            const q = currentQuestions[currentIndex];
+            const isCorrect = selected === q.correct;
 
-            if (selectedIndex === correctIndex) {
+            if (isCorrect) {
+                score++;
                 btnElement.classList.add('choice-correct');
-                currentSession.score++;
                 confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
             } else {
                 btnElement.classList.add('choice-wrong');
-                // Highlight correct one
-                const correctBtn = document.querySelector(`.choice-btn[data-index="${correctIndex}"]`);
-                if(correctBtn) correctBtn.classList.add('choice-correct');
+                // Highlight correct
+                buttons.forEach(b => {
+                    if(b.innerText.includes(q.correct)) b.classList.add('choice-correct');
+                });
             }
 
-            document.getElementById('rationale-box').classList.remove('hidden');
-        }
-
-        function nextQuestion() {
-            currentSession.index++;
-            renderQuestion();
-        }
-
-        function showResults() {
-            const percentage = Math.round((currentSession.score / currentSession.questions.length) * 100);
-            const qContainer = document.getElementById('view-quiz');
-            
-            let msg = percentage >= 80 ? "Excellent!" : "Keep Reviewing!";
-            let color = percentage >= 80 ? "var(--success)" : "var(--warning)";
-            let emoji = percentage >= 80 ? '🏆' : '📚';
-
-            qContainer.innerHTML = `
-                <div class="card" style="text-align: center; padding: 40px;">
-                    <div style="font-size: 3rem; margin-bottom: 10px;">${emoji}</div>
-                    <h2 style="color:${color}; margin-bottom:10px;">${msg}</h2>
-                    <div style="font-size: 4rem; font-weight: 800; color: white;">${percentage}%</div>
-                    <p style="color: var(--text-muted); margin-bottom: 30px;">You got ${currentSession.score} out of ${currentSession.questions.length} correct.</p>
-                    
-                    <button id="btn-return-dash" class="btn btn-primary">Return to Dashboard</button>
+            // Show Rationale
+            document.getElementById('rationale-area').innerHTML = `
+                <div class="rationale-panel fade-in">
+                    <div class="rationale-timer-bar"><strong>Rationale</strong></div>
+                    <div class="rationale-content">${q.rationale || "No explanation provided."}</div>
                 </div>
             `;
 
-            document.getElementById('btn-return-dash').addEventListener('click', () => navTo('dashboard'));
+            document.getElementById('next-btn').classList.remove('hidden');
+            
+            // Update stats locally (mock)
+            updateLocalStats(selectedCategory, isCorrect);
+        };
+
+        window.nextQuestion = () => {
+            currentIndex++;
+            if (currentIndex < currentQuestions.length) {
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        };
+
+        function showResults() {
+            const percentage = Math.round((score / currentQuestions.length) * 100);
+            document.getElementById('view-quiz').innerHTML = `
+                <div class="card" style="text-align:center; padding:40px;">
+                    <h2 style="color:var(--primary); margin-bottom:10px;">SESSION COMPLETE</h2>
+                    <div style="font-size:4rem; font-weight:800;">${percentage}%</div>
+                    <p style="color:var(--text-muted); margin-bottom:30px;">You got ${score} out of ${currentQuestions.length}</p>
+                    <button onclick="navTo('dashboard'); loadStats();" class="btn btn-primary">Back to Dashboard</button>
+                </div>
+            `;
         }
+
+        // --- MOCK STATS (Use Firestore in production) ---
+        function updateLocalStats(cat, correct) {
+            let stats = JSON.parse(localStorage.getItem('cse_stats')) || {};
+            if(!stats[cat]) stats[cat] = { total: 0, correct: 0 };
+            if(!stats['ALL']) stats['ALL'] = { total: 0, correct: 0 };
+            
+            stats[cat].total++;
+            if(correct) stats[cat].correct++;
+            
+            stats['ALL'].total++;
+            if(correct) stats['ALL'].correct++;
+            
+            localStorage.setItem('cse_stats', JSON.stringify(stats));
+        }
+
+        window.loadStats = () => {
+             // Load from local storage for demo speed, ideally fetch from Firestore user subcollection
+            let stats = JSON.parse(localStorage.getItem('cse_stats')) || {};
+            
+            const cats = ['Numerical', 'Verbal', 'Analytical', 'GenInfo', 'Clerical', 'ALL'];
+            
+            cats.forEach(c => {
+                if(stats[c]) {
+                    const pct = Math.round((stats[c].correct / stats[c].total) * 100) || 0;
+                    const ring = document.getElementById(`ring-${c}`);
+                    const txt = document.getElementById(`txt-${c}`);
+                    
+                    if(ring) {
+                        const offset = 220 - (220 * pct) / 100; // 220 is circumference for small rings
+                        // For Main ring (ALL), circumference is ~502
+                        if(c === 'ALL') {
+                             const mainOffset = 502 - (502 * pct) / 100;
+                             ring.style.strokeDashoffset = mainOffset;
+                             txt.innerText = pct + "%";
+                             document.getElementById('ans-ALL').innerText = stats[c].total;
+                        } else {
+                            ring.style.strokeDashoffset = offset;
+                            txt.innerText = pct + "%";
+                        }
+                    }
+                }
+            });
+        };
+
+        window.resetStats = () => {
+            if(confirm("Reset all mastery progress?")) {
+                localStorage.removeItem('cse_stats');
+                loadStats();
+                window.location.reload();
+            }
+        };
 
     </script>
 </body>
