@@ -145,6 +145,24 @@
         .nav-item:hover { color: white; background: rgba(255,255,255,0.03); }
         .nav-item.active { background: var(--primary-dim); color: var(--primary); font-weight: 600; }
 
+        /* SUBSCRIPTION BOX */
+        .sub-box {
+            padding: 20px;
+            margin: 20px;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(15, 23, 42, 0.5));
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .sub-days {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
         /* MAIN CONTENT */
         .main { flex: 1; display: flex; flex-direction: column; position: relative; width: 100%; }
         
@@ -193,7 +211,6 @@
             height: 100%; background: var(--primary); width: 100%; 
             transition: width 1s linear, background 0.3s;
         }
-        /* Color shifts for timer */
         .timer-fill.warning { background: var(--warning); }
         .timer-fill.danger { background: var(--danger); }
 
@@ -269,7 +286,7 @@
         <div id="form-register" class="card auth-card hidden">
             <h2 style="text-align: center; margin-bottom: 5px; color: var(--success);">REGISTER</h2>
             <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Step 1: Send GCash Payment</p>
-              <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">CSE Subscription Php 300: 90 days</p>
+             <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">CSE Subscription: 90 days</p>
             <div style="background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 8px; border: 1px dashed var(--success); margin-bottom: 20px;">
                 <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--success); font-weight: bold;">Send to GCash</div>
                 <div style="font-size: 1.2rem; font-family: var(--font-mono); color: white; margin: 5px 0;">0948 374 8304</div>
@@ -318,14 +335,18 @@
                 <div class="nav-item active" onclick="navTo('dashboard'); toggleSidebar()"><i class='bx bxs-dashboard'></i> Dashboard</div>
                 <div class="nav-item" onclick="navTo('topics'); toggleSidebar()"><i class='bx bxs-book-content'></i> Start Review</div>
             </div>
-            <div style="padding: 20px;">
-                <div class="card" style="padding: 15px; background: rgba(0,0,0,0.2); border: none;">
-                    <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Subscription</div>
-                    <div style="display:flex; align-items:center; gap:6px; margin-top: 5px; color: var(--success); font-weight: 600; font-size: 0.85rem;">
-                        <span style="width:8px; height:8px; background:var(--success); border-radius:50%; box-shadow: 0 0 10px var(--success);"></span> Active
-                    </div>
+            
+            <div class="sub-box">
+                <div style="font-size: 0.7rem; color: #fbbf24; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-bottom: 5px;">
+                    <i class='bx bxs-crown'></i> PREMIUM ACCESS
+                </div>
+                <div id="days-remaining" class="sub-days">90</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Days Remaining</div>
+                <div style="margin-top: 10px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+                    <div id="days-progress" style="width: 100%; height: 100%; background: var(--primary); border-radius: 2px;"></div>
                 </div>
             </div>
+
         </aside>
 
         <main class="main">
@@ -409,16 +430,16 @@
                         <h2 style="margin-bottom: 10px;">Exam Settings</h2>
                         <p style="color: var(--text-muted); margin-bottom: 30px;">How many questions do you want to tackle?</p>
                         <div style="display: grid; gap: 15px;">
+                            <button onclick="startQuiz(5)" class="btn btn-outline" style="justify-content: space-between;">5 Items (Demo) <i class='bx bx-chevron-right'></i></button>
                             <button onclick="startQuiz(10)" class="btn btn-outline" style="justify-content: space-between;">10 Items <i class='bx bx-chevron-right'></i></button>
                             <button onclick="startQuiz(20)" class="btn btn-outline" style="justify-content: space-between;">20 Items <i class='bx bx-chevron-right'></i></button>
-                            <button onclick="startQuiz(50)" class="btn btn-outline" style="justify-content: space-between;">50 Items <i class='bx bx-chevron-right'></i></button>
-                            <button onclick="startQuiz(100)" class="btn btn-outline" style="justify-content: space-between; border-color: var(--primary);">100 Items <i class='bx bx-chevron-right'></i></button>
+                            <button onclick="startQuiz(50)" class="btn btn-outline" style="justify-content: space-between; border-color: var(--primary);">50 Items <i class='bx bx-chevron-right'></i></button>
                         </div>
                     </div>
                 </div>
 
                 <div id="view-quiz" class="hidden fade-in quiz-container">
-                </div>
+                    </div>
 
             </div>
         </main>
@@ -453,8 +474,10 @@
         // Timer Variables
         let questionTimerInterval;
         let nextQuestionInterval;
-        const QUESTION_TIME_LIMIT = 30; // Seconds
-        const NEXT_TIME_LIMIT = 10;     // Seconds
+        let autoRedirectInterval; // New Interval for Auto Redirect
+
+        const QUESTION_TIME_LIMIT = 60; // Increased to 60s for realism
+        const NEXT_TIME_LIMIT = 5;      // Seconds before auto-next question
 
         // --- AUTH LOGIC ---
         const loginEmail = document.getElementById('inp-email');
@@ -483,8 +506,7 @@
                     gcashReference: regRef.value, 
                     status: "pending",
                     createdAt: new Date(),
-                    activationDate: null,
-                    expiryDate: null,
+                    subscriptionStart: null, // Will be set on admin approval
                     stats: {} 
                 });
                 alert("Registration submitted! Please wait for approval.");
@@ -515,13 +537,14 @@
                         document.getElementById('view-pending').classList.add('hidden');
                         document.getElementById('user-name').innerText = user.email.split('@')[0];
                         loadStatsUI();
+                        checkSubscription(userData); // Check days left
                     } else {
                         showView('view-pending');
                         document.getElementById('view-auth').classList.add('hidden');
                     }
                 } else {
-                    showView('view-pending');
-                    document.getElementById('view-auth').classList.add('hidden');
+                    // Fallback for demo if user exists in Auth but not Firestore
+                    showView('view-pending'); 
                 }
             } else {
                 currentUserUID = null;
@@ -531,6 +554,38 @@
                 document.getElementById('view-pending').classList.add('hidden');
             }
         });
+
+        // --- SUBSCRIPTION LOGIC (90 DAYS) ---
+        function checkSubscription(userData) {
+            // For Demo: Assume start date is NOW if not set, or use stored date
+            // In a real app, 'subscriptionStart' comes from the DB (set by Admin)
+            let startDate = userData.subscriptionStart ? userData.subscriptionStart.toDate() : new Date();
+            
+            // Calculate Expiry (90 Days from start)
+            let expiryDate = new Date(startDate);
+            expiryDate.setDate(startDate.getDate() + 90);
+            
+            let today = new Date();
+            let timeDiff = expiryDate.getTime() - today.getTime();
+            let daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            
+            if(daysLeft < 0) daysLeft = 0;
+
+            // Update UI
+            document.getElementById('days-remaining').innerText = daysLeft;
+            
+            // Update Progress Bar (assuming 90 days total)
+            let percentage = (daysLeft / 90) * 100;
+            document.getElementById('days-progress').style.width = percentage + "%";
+            
+            // Color Logic
+            const daysText = document.getElementById('days-remaining');
+            const daysBar = document.getElementById('days-progress');
+            if(daysLeft <= 10) {
+                daysText.style.color = "var(--danger)";
+                daysBar.style.background = "var(--danger)";
+            }
+        }
 
         // --- NAVIGATION & UI ---
         window.toggleAuthMode = () => {
@@ -549,6 +604,7 @@
             // Stop timers when navigating away
             clearInterval(questionTimerInterval);
             clearInterval(nextQuestionInterval);
+            clearInterval(autoRedirectInterval);
 
             ['view-dashboard', 'view-topics', 'view-count', 'view-quiz'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
@@ -582,7 +638,7 @@
                 let qQuery;
 
                 if (selectedCategory === 'ALL') {
-                    qQuery = query(qRef, limit(limitCount * 2)); 
+                    qQuery = query(qRef, limit(limitCount * 3)); 
                 } else {
                     qQuery = query(qRef, where("category", "==", selectedCategory), limit(limitCount));
                 }
@@ -592,7 +648,9 @@
                     currentQuestions.push({ id: doc.id, ...doc.data() });
                 });
 
+                // Randomize
                 currentQuestions.sort(() => Math.random() - 0.5);
+                // Slice to exact limit asked
                 currentQuestions = currentQuestions.slice(0, limitCount);
 
                 if (currentQuestions.length === 0) {
@@ -615,7 +673,6 @@
         };
 
         function renderQuestion() {
-            // Stop any previous timers
             clearInterval(questionTimerInterval);
             clearInterval(nextQuestionInterval);
 
@@ -652,7 +709,6 @@
                 <button id="next-btn" class="btn btn-primary hidden" onclick="nextQuestion()" style="width:100%; margin-top:20px;">Next Question <i class='bx bx-right-arrow-alt'></i></button>
             `;
 
-            // Start the 30-second timer
             startQuestionTimer();
         }
 
@@ -660,45 +716,33 @@
             let timeLeft = QUESTION_TIME_LIMIT;
             const timerFill = document.getElementById('q-timer-fill');
             
-            // Reset visuals
             timerFill.style.width = '100%';
-            timerFill.className = 'timer-fill'; // reset colors
+            timerFill.className = 'timer-fill'; 
 
             questionTimerInterval = setInterval(() => {
                 timeLeft--;
-                
-                // Update Width
                 const percentage = (timeLeft / QUESTION_TIME_LIMIT) * 100;
                 timerFill.style.width = `${percentage}%`;
 
-                // Update Color based on time left
-                if (timeLeft <= 10) {
-                    timerFill.classList.add('warning');
-                }
-                if (timeLeft <= 5) {
-                    timerFill.classList.add('danger');
-                }
+                if (timeLeft <= 10) timerFill.classList.add('warning');
+                if (timeLeft <= 5) timerFill.classList.add('danger');
 
                 if (timeLeft <= 0) {
                     clearInterval(questionTimerInterval);
-                    handleTimeUp(); // Treat as wrong/no answer
+                    handleTimeUp(); 
                 }
             }, 1000);
         }
 
         function handleTimeUp() {
-            // Automatically mark as wrong (pass null as selected)
             checkAnswer(null, null);
         }
 
         window.checkAnswer = (selected, btnElement) => {
-            // Stop the 30s timer immediately
             clearInterval(questionTimerInterval);
 
             const buttons = document.querySelectorAll('.choice-btn');
-            // Disable all buttons
             buttons.forEach(b => b.classList.add('disabled'));
-            // Remove onClick to prevent double submission
             buttons.forEach(b => b.onclick = null);
 
             const q = currentQuestions[currentIndex];
@@ -713,9 +757,6 @@
                 } else {
                     btnElement.classList.add('choice-wrong');
                 }
-            } else {
-                // Time up scenario
-                // No button clicked, just highlight the correct one
             }
 
             // Always highlight correct answer
@@ -733,19 +774,15 @@
             const nextBtn = document.getElementById('next-btn');
             nextBtn.classList.remove('hidden');
 
-            // UPDATE STATS
             updateLocalStats(q.category, isCorrect);
             updateLocalStats('ALL', isCorrect);
 
-            // START AUTO NEXT TIMER (10 Seconds)
             startNextQuestionTimer();
         };
 
         function startNextQuestionTimer() {
             let nextTimeLeft = NEXT_TIME_LIMIT;
             const nextBtn = document.getElementById('next-btn');
-
-            // Initial text
             nextBtn.innerHTML = `Next Question (${nextTimeLeft}s) <i class='bx bx-right-arrow-alt'></i>`;
 
             nextQuestionInterval = setInterval(() => {
@@ -760,9 +797,7 @@
         }
 
         window.nextQuestion = () => {
-            // Ensure timer stops if user clicked manually
             clearInterval(nextQuestionInterval);
-            
             currentIndex++;
             if (currentIndex < currentQuestions.length) {
                 renderQuestion();
@@ -771,19 +806,49 @@
             }
         };
 
+        // --- NEW AUTO REDIRECT LOGIC ---
         function showResults() {
             clearInterval(questionTimerInterval);
             clearInterval(nextQuestionInterval);
             
+            // Auto Save first
+            saveAndExit(false); 
+
             const percentage = Math.round((score / currentQuestions.length) * 100);
+            
+            // 5-Second Auto Redirect Logic
+            let autoSeconds = 5;
+
             document.getElementById('view-quiz').innerHTML = `
-                <div class="card" style="text-align:center; padding:40px;">
-                    <h2 style="color:var(--primary); margin-bottom:10px;">SESSION COMPLETE</h2>
-                    <div style="font-size:4rem; font-weight:800;">${percentage}%</div>
+                <div class="card fade-in" style="text-align:center; padding:40px;">
+                    <div style="font-size:3rem; color:var(--primary); margin-bottom:10px;"><i class='bx bx-check-shield'></i></div>
+                    <h2 style="color: white; margin-bottom:10px;">SESSION COMPLETE</h2>
+                    <div style="font-size:4rem; font-weight:800; color:var(--primary); text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);">${percentage}%</div>
                     <p style="color:var(--text-muted); margin-bottom:30px;">You got ${score} out of ${currentQuestions.length}</p>
-                    <button onclick="saveAndExit()" class="btn btn-primary">Save Progress & Exit</button>
+                    
+                    <div style="background: rgba(255,255,255,0.05); padding:15px; border-radius:12px; margin-bottom:20px;">
+                        <p id="redirect-msg" style="color:var(--text-main); font-family:var(--font-mono);">
+                            Returning to Dashboard in <span style="color:var(--primary); font-weight:bold; font-size:1.2rem;">${autoSeconds}</span>...
+                        </p>
+                    </div>
+
+                    <button onclick="navTo('dashboard')" class="btn btn-outline">Return Now</button>
                 </div>
             `;
+
+            // Start the 5-second Interval
+            autoRedirectInterval = setInterval(() => {
+                autoSeconds--;
+                const msgEl = document.getElementById('redirect-msg');
+                if(msgEl) {
+                    msgEl.innerHTML = `Returning to Dashboard in <span style="color:var(--primary); font-weight:bold; font-size:1.2rem;">${autoSeconds}</span>...`;
+                }
+
+                if(autoSeconds <= 0) {
+                    clearInterval(autoRedirectInterval);
+                    navTo('dashboard'); // BALIK DASHBOARD
+                }
+            }, 1000);
         }
 
         // --- STATS LOGIC ---
@@ -796,18 +861,15 @@
             if (correct) userStats[cat].correct++;
         }
 
-        window.saveAndExit = async () => {
+        window.saveAndExit = async (shouldNavigate = true) => {
             if(currentUserUID) {
                 try {
                     await updateDoc(doc(db, "users", currentUserUID), {
                         stats: userStats
                     });
-                    console.log("Stats synced to cloud");
-                    navTo('dashboard');
+                    if(shouldNavigate) navTo('dashboard');
                 } catch (e) {
                     console.error("Error saving stats", e);
-                    alert("Failed to save progress. Check connection.");
-                    navTo('dashboard');
                 }
             }
         };
@@ -850,6 +912,7 @@
             if(confirm("Reset all mastery progress? This deletes your history.")) {
                 userStats = {};
                 await saveAndExit();
+                loadStatsUI();
             }
         };
 
