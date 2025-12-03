@@ -18,7 +18,7 @@
             --bg-deep: #0f172a;        /* Dark Slate */
             --bg-surface: #1e293b;     /* Slate */
             
-            --primary: #fbbf24;        /* Gold/Yellow (Gov Style) */
+            --primary: #fbbf24;        /* Gold/Yellow */
             --primary-dim: rgba(251, 191, 36, 0.1);
             --primary-glow: rgba(251, 191, 36, 0.5);
             
@@ -309,7 +309,6 @@
                     <div style="display:flex; align-items:center; gap:6px; margin-top: 5px; color: var(--success); font-weight: 600; font-size: 0.85rem;">
                         <span style="width:8px; height:8px; background:var(--success); border-radius:50%; box-shadow: 0 0 10px var(--success);"></span> Active
                     </div>
-                    <div id="days-remaining" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px;">Checking...</div>
                 </div>
             </div>
         </aside>
@@ -412,9 +411,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDoc, getDocs, doc, setDoc, query, where, limit } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDoc, getDocs, doc, setDoc, updateDoc, query, where, limit } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBY4msSow0k_2iP0IJeMZH8Qbzdj5lXeAo",
@@ -422,12 +420,10 @@
             projectId: "csereviewer-fef62",
             storageBucket: "csereviewer-fef62.firebasestorage.app",
             messagingSenderId: "74512458822",
-            appId: "1:74512458822:web:3bdde797fb72930c801647",
-            measurementId: "G-D8SESFX8T5"
+            appId: "1:74512458822:web:3bdde797fb72930c801647"
         };
 
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
@@ -436,6 +432,8 @@
         let currentIndex = 0;
         let score = 0;
         let selectedCategory = '';
+        let currentUserUID = null;
+        let userStats = {}; // Stores the local version of stats
 
         // --- AUTH LOGIC ---
         const loginEmail = document.getElementById('inp-email');
@@ -458,12 +456,16 @@
             if(regPass.value.length < 6) return document.getElementById('reg-msg').innerText = "Password too short.";
             try {
                 const userCred = await createUserWithEmailAndPassword(auth, regEmail.value, regPass.value);
-                // Create User Doc with Pending Status
+                
+                // CREATE USER DOC EXACTLY LIKE SCREENSHOT (Nested stats object)
                 await setDoc(doc(db, "users", userCred.user.uid), {
                     email: regEmail.value,
-                    gcashRef: regRef.value,
+                    gcashReference: regRef.value, // Matched screenshot
                     status: "pending",
-                    createdAt: new Date()
+                    createdAt: new Date(),
+                    activationDate: null,
+                    expiryDate: null,
+                    stats: {} // Starts empty, will fill with ALL, Numerical, etc.
                 });
                 alert("Registration submitted! Please wait for approval.");
             } catch (error) {
@@ -479,26 +481,32 @@
         // Auth State Observer
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Check subscription status
+                currentUserUID = user.uid;
                 const userSnap = await getDoc(doc(db, "users", user.uid));
+                
                 if (userSnap.exists()) {
                     const userData = userSnap.data();
+                    
                     if (userData.status === 'active') {
+                        // LOAD STATS from Firestore into local memory
+                        userStats = userData.stats || {};
+                        
                         showView('app-layout');
                         document.getElementById('view-auth').classList.add('hidden');
                         document.getElementById('view-pending').classList.add('hidden');
                         document.getElementById('user-name').innerText = user.email.split('@')[0];
-                        loadStats();
+                        loadStatsUI();
                     } else {
                         showView('view-pending');
                         document.getElementById('view-auth').classList.add('hidden');
                     }
                 } else {
-                    // New user fix if logic fails
                     showView('view-pending');
                     document.getElementById('view-auth').classList.add('hidden');
                 }
             } else {
+                currentUserUID = null;
+                userStats = {};
                 showView('view-auth');
                 document.getElementById('app-layout').classList.add('hidden');
                 document.getElementById('view-pending').classList.add('hidden');
@@ -524,6 +532,7 @@
             });
             document.getElementById('view-' + viewId).classList.remove('hidden');
             document.getElementById('page-title').innerText = viewId === 'dashboard' ? 'Dashboard' : 'Reviewer';
+            if(viewId === 'dashboard') loadStatsUI();
         };
 
         function showView(id) {
@@ -541,7 +550,6 @@
             document.getElementById('view-count').classList.add('hidden');
             document.getElementById('view-loading').classList.remove('hidden');
 
-            // FETCH FROM FIREBASE
             currentQuestions = [];
             score = 0;
             currentIndex = 0;
@@ -551,7 +559,6 @@
                 let qQuery;
 
                 if (selectedCategory === 'ALL') {
-                    // Firestore can't random easily, so we fetch a batch and shuffle client side
                     qQuery = query(qRef, limit(limitCount * 2)); 
                 } else {
                     qQuery = query(qRef, where("category", "==", selectedCategory), limit(limitCount));
@@ -562,9 +569,7 @@
                     currentQuestions.push({ id: doc.id, ...doc.data() });
                 });
 
-                // Shuffle
                 currentQuestions.sort(() => Math.random() - 0.5);
-                // Slice to exact limit
                 currentQuestions = currentQuestions.slice(0, limitCount);
 
                 if (currentQuestions.length === 0) {
@@ -590,7 +595,6 @@
             const q = currentQuestions[currentIndex];
             const container = document.getElementById('view-quiz');
             
-            // Build Options HTML
             let optionsHtml = '';
             q.options.forEach((opt, idx) => {
                 const letters = ['A', 'B', 'C', 'D'];
@@ -608,6 +612,7 @@
                     <span style="color:var(--primary);">Score: ${score}</span>
                 </div>
                 <div class="card" style="padding:25px; margin-bottom:20px;">
+                    <div style="font-size:0.7rem; color:var(--primary); margin-bottom:5px; text-transform:uppercase;">${q.category}</div>
                     <div class="question-text">${q.question}</div>
                     ${optionsHtml}
                 </div>
@@ -617,7 +622,6 @@
         }
 
         window.checkAnswer = (selected, btnElement) => {
-            // Disable all buttons
             const buttons = document.querySelectorAll('.choice-btn');
             buttons.forEach(b => b.onclick = null);
 
@@ -630,13 +634,11 @@
                 confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
             } else {
                 btnElement.classList.add('choice-wrong');
-                // Highlight correct
                 buttons.forEach(b => {
                     if(b.innerText.includes(q.correct)) b.classList.add('choice-correct');
                 });
             }
 
-            // Show Rationale
             document.getElementById('rationale-area').innerHTML = `
                 <div class="rationale-panel fade-in">
                     <div class="rationale-timer-bar"><strong>Rationale</strong></div>
@@ -646,8 +648,13 @@
 
             document.getElementById('next-btn').classList.remove('hidden');
             
-            // Update stats locally (mock)
-            updateLocalStats(selectedCategory, isCorrect);
+            // --- CORE LOGIC FIX: DOUBLE UPDATE ---
+            // 1. Update the Actual Category (Even if mode is Mock/ALL)
+            // This ensures Numerical stats go up even inside Mock Exam
+            updateLocalStats(q.category, isCorrect);
+            
+            // 2. Always Update 'ALL' stats
+            updateLocalStats('ALL', isCorrect);
         };
 
         window.nextQuestion = () => {
@@ -666,30 +673,49 @@
                     <h2 style="color:var(--primary); margin-bottom:10px;">SESSION COMPLETE</h2>
                     <div style="font-size:4rem; font-weight:800;">${percentage}%</div>
                     <p style="color:var(--text-muted); margin-bottom:30px;">You got ${score} out of ${currentQuestions.length}</p>
-                    <button onclick="navTo('dashboard'); loadStats();" class="btn btn-primary">Back to Dashboard</button>
+                    <button onclick="saveAndExit()" class="btn btn-primary">Save Progress & Exit</button>
                 </div>
             `;
         }
 
-        // --- MOCK STATS (Use Firestore in production) ---
+        // --- STATS LOGIC (Mirroring the Screenshot Structure) ---
+        
         function updateLocalStats(cat, correct) {
-            let stats = JSON.parse(localStorage.getItem('cse_stats')) || {};
-            if(!stats[cat]) stats[cat] = { total: 0, correct: 0 };
-            if(!stats['ALL']) stats['ALL'] = { total: 0, correct: 0 };
+            // Ensure object exists for this category (e.g., stats.Numerical = {})
+            if (!userStats[cat]) {
+                userStats[cat] = { total: 0, correct: 0 };
+            }
             
-            stats[cat].total++;
-            if(correct) stats[cat].correct++;
+            userStats[cat].total++;
+            if (correct) userStats[cat].correct++;
             
-            stats['ALL'].total++;
-            if(correct) stats['ALL'].correct++;
-            
-            localStorage.setItem('cse_stats', JSON.stringify(stats));
+            // NOTE: This updates the 'userStats' variable in memory.
+            // We save it to Firebase at the end of the quiz.
         }
 
-        window.loadStats = () => {
-             // Load from local storage for demo speed, ideally fetch from Firestore user subcollection
-            let stats = JSON.parse(localStorage.getItem('cse_stats')) || {};
-            
+        window.saveAndExit = async () => {
+            if(currentUserUID) {
+                try {
+                    // Update the user document. 
+                    // This puts the entire 'userStats' object into the 'stats' field in Firestore.
+                    // Result: stats: { ALL: {correct:126...}, Numerical: {correct:86...} }
+                    await updateDoc(doc(db, "users", currentUserUID), {
+                        stats: userStats
+                    });
+                    console.log("Stats synced to cloud");
+                    navTo('dashboard');
+                } catch (e) {
+                    console.error("Error saving stats", e);
+                    alert("Failed to save progress. Check connection.");
+                    navTo('dashboard');
+                }
+            }
+        };
+
+        window.loadStatsUI = () => {
+            const stats = userStats; 
+            // Mapping keys to UI IDs. 
+            // Ensure your Firestore Data matches these keys (Numerical, Verbal, etc.)
             const cats = ['Numerical', 'Verbal', 'Analytical', 'GenInfo', 'Clerical', 'ALL'];
             
             cats.forEach(c => {
@@ -699,27 +725,34 @@
                     const txt = document.getElementById(`txt-${c}`);
                     
                     if(ring) {
-                        const offset = 220 - (220 * pct) / 100; // 220 is circumference for small rings
-                        // For Main ring (ALL), circumference is ~502
                         if(c === 'ALL') {
                              const mainOffset = 502 - (502 * pct) / 100;
                              ring.style.strokeDashoffset = mainOffset;
                              txt.innerText = pct + "%";
                              document.getElementById('ans-ALL').innerText = stats[c].total;
                         } else {
+                            const offset = 220 - (220 * pct) / 100; 
                             ring.style.strokeDashoffset = offset;
                             txt.innerText = pct + "%";
                         }
                     }
+                } else {
+                    // Reset UI if no data
+                    const ring = document.getElementById(`ring-${c}`);
+                    const txt = document.getElementById(`txt-${c}`);
+                    if(ring) {
+                        ring.style.strokeDashoffset = c === 'ALL' ? 502 : 220;
+                        txt.innerText = "0%";
+                    }
+                    if(c === 'ALL') document.getElementById('ans-ALL').innerText = "0";
                 }
             });
         };
 
-        window.resetStats = () => {
-            if(confirm("Reset all mastery progress?")) {
-                localStorage.removeItem('cse_stats');
-                loadStats();
-                window.location.reload();
+        window.resetStats = async () => {
+            if(confirm("Reset all mastery progress? This deletes your history.")) {
+                userStats = {};
+                await saveAndExit();
             }
         };
 
