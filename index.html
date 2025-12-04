@@ -54,7 +54,7 @@
             position: relative;
         }
 
-        /* --- MOVING BACKGROUND EFFECTS (The "Nagalaw" Part) --- */
+        /* --- MOVING BACKGROUND EFFECTS --- */
         .ambient-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden;
             background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
@@ -66,7 +66,6 @@
         }
         .orb-1 { width: 300px; height: 300px; background: var(--secondary); top: -50px; left: -50px; animation-duration: 25s; }
         .orb-2 { width: 400px; height: 400px; background: var(--primary-glow); bottom: -100px; right: -50px; animation-duration: 30s; animation-delay: -5s; }
-        .orb-3 { width: 200px; height: 200px; background: var(--accent); top: 40%; left: 60%; opacity: 0.2; animation-duration: 18s; animation-delay: -10s; }
 
         @keyframes floatOrb {
             0% { transform: translate(0, 0) scale(1); }
@@ -88,7 +87,6 @@
         /* INTRO ANIMATIONS */
         .pulse-text { animation: pulse 1s infinite; }
         @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
-        
         .scale-up { animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         @keyframes scaleUp { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
@@ -112,7 +110,6 @@
             position: relative; overflow: hidden; user-select: none;
         }
         .btn:active { transform: scale(0.96); }
-        
         .btn-primary { 
             background: linear-gradient(135deg, var(--primary), #d97706); 
             color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.2);
@@ -120,10 +117,8 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
         .btn-primary:hover { filter: brightness(1.1); box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5); }
-        
         .btn-outline { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--text-muted); }
         .btn-outline:hover { border-color: var(--primary); color: var(--text-main); background: var(--primary-dim); }
-        
         .btn-ghost { background: transparent; color: var(--text-muted); }
         .btn-ghost:hover { color: var(--text-main); background: rgba(255,255,255,0.05); }
 
@@ -134,15 +129,14 @@
             width: 100%; padding: 14px; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); 
             color: white; border-radius: 12px; font-family: inherit; transition: 0.3s; font-size: 0.9rem;
         }
-        .input::placeholder { color: rgba(255,255,255,0.3); }
         .input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-dim); background: rgba(0,0,0,0.6); }
 
         /* AUTH SCREEN */
         .auth-wrapper { 
             display: flex; height: 100vh; width: 100%; justify-content: center; align-items: center; 
-            z-index: 100; position: fixed; inset: 0;
+            z-index: 100; position: fixed; inset: 0; padding: 20px;
         }
-        .auth-card { width: 100%; max-width: 400px; padding: 40px 30px; margin: 20px; max-height: 90vh; overflow-y: auto;}
+        .auth-card { width: 100%; max-width: 400px; padding: 40px 30px; max-height: 90vh; overflow-y: auto;}
         .brand-logo { 
             width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), #d97706); 
             border-radius: 20px; display: flex; align-items: center; justify-content: center; 
@@ -156,63 +150,65 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        /* MODAL FOR CONFLICT */
+        /* MODAL */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 300;
             display: flex; justify-content: center; align-items: center; padding: 20px;
         }
         .modal-box {
             max-width: 400px; width: 100%; text-align: center; border-color: var(--warning);
-            box-shadow: 0 0 50px rgba(245, 158, 11, 0.2);
+            box-shadow: 0 0 50px rgba(245, 158, 11, 0.2); padding: 30px;
         }
 
-        /* APP LAYOUT */
-        .layout { display: flex; height: 100vh; overflow: hidden; }
+        /* APP LAYOUT - RESPONSIVE FIXES */
+        .layout { display: flex; height: 100vh; overflow: hidden; width: 100%; }
         
         /* SIDEBAR */
         .sidebar { 
-            width: 260px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); 
+            width: 280px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); 
             display: flex; flex-direction: column; z-index: 50; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0; /* Prevent shrinking on small desktops */
         }
-        .sidebar-header { padding: 30px; display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.4rem; letter-spacing: -0.5px; }
+        .sidebar-header { padding: 30px; display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.4rem; }
         .sidebar-header i { color: var(--primary); font-size: 1.6rem; }
-        
         .nav-links { padding: 0 15px; flex: 1; }
         .nav-item { 
             padding: 14px 20px; border-radius: 10px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 12px; 
             margin-bottom: 5px; transition: 0.2s; font-weight: 500; font-size: 0.95rem;
         }
-        .nav-item i { font-size: 1.2rem; }
         .nav-item:hover { color: white; background: rgba(255,255,255,0.03); }
         .nav-item.active { background: var(--primary-dim); color: var(--primary); font-weight: 600; }
 
         /* SUBSCRIPTION BOX */
         .sub-box {
-            padding: 20px;
-            margin: 20px;
-            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(15, 23, 42, 0.5));
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            border-radius: 16px;
-            position: relative;
-            overflow: hidden;
+            padding: 20px; margin: 20px; background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(15, 23, 42, 0.5));
+            border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 16px;
         }
-        .sub-days {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary);
-            line-height: 1;
-            margin-bottom: 5px;
-        }
+        .sub-days { font-size: 1.8rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 5px; }
 
         /* MAIN CONTENT */
-        .main { flex: 1; display: flex; flex-direction: column; position: relative; width: 100%; }
+        .main { flex: 1; display: flex; flex-direction: column; position: relative; min-width: 0; /* Important for flex child truncation */ }
         
         .header { 
             height: 70px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; 
-            padding: 0 25px; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); z-index: 40;
+            padding: 0 20px; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); z-index: 40;
         }
         
-        .scroll-area { flex: 1; overflow-y: auto; padding: 25px; scroll-behavior: smooth; }
+        .scroll-area { flex: 1; overflow-y: auto; padding: 20px; scroll-behavior: smooth; }
+
+        /* RESPONSIVE MEDIA QUERIES */
+        .menu-toggle { display: none; font-size: 1.8rem; color: white; background: none; border: none; cursor: pointer; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); z-index: 45; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .overlay.active { opacity: 1; pointer-events: auto; }
+
+        @media (max-width: 900px) {
+            .sidebar { position: fixed; left: -100%; height: 100%; box-shadow: 10px 0 30px rgba(0,0,0,0.5); width: 280px; }
+            .sidebar.active { left: 0; }
+            .menu-toggle { display: block; }
+            .welcome-banner { flex-direction: column; text-align: center; gap: 15px; }
+            .mastery-card { flex-direction: column-reverse; text-align: center; gap: 20px; }
+            .auth-card { padding: 30px 20px; }
+        }
 
         /* DASHBOARD WIDGETS */
         .welcome-banner {
@@ -220,24 +216,19 @@
             border: 1px solid var(--glass-border); border-radius: 16px; padding: 30px; margin-bottom: 25px;
             display: flex; justify-content: space-between; align-items: center;
         }
-
         .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        
         .mastery-card {
             grid-column: 1 / -1; background: linear-gradient(180deg, rgba(251, 191, 36, 0.05), rgba(15, 23, 42, 0.6));
             display: flex; align-items: center; justify-content: space-between; padding: 30px;
         }
-        @media (max-width: 768px) { .mastery-card { flex-direction: column-reverse; text-align: center; gap: 20px; } .welcome-banner { flex-direction: column; text-align: center; gap: 15px; } }
-
-        .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
         .cat-card {
-            background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px;
+            background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 16px; padding: 15px;
             text-align: center; transition: 0.3s; cursor: default;
         }
-        .cat-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.04); border-color: var(--primary-glow); }
-        
-        /* CIRCULAR PROGRESS */
-        .ring-container { position: relative; width: 80px; height: 80px; margin: 0 auto 10px; }
+
+        /* CIRCULAR PROGRESS & QUIZ - Kept same as previous */
+        .ring-container { position: relative; width: 70px; height: 70px; margin: 0 auto 10px; }
         .ring-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
         .ring-circle-bg { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 6; }
         .ring-circle-val { 
@@ -245,70 +236,31 @@
             stroke-dasharray: 220; stroke-dashoffset: 220; transition: stroke-dashoffset 1s ease-out;
             filter: drop-shadow(0 0 4px var(--c-color));
         }
-        .ring-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.9rem; font-weight: 700; font-family: var(--font-mono); }
-
-        /* QUIZ INTERFACE & TIMERS */
-        .quiz-container { max-width: 800px; margin: 0 auto; padding-bottom: 100px; }
+        .ring-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); }
         
-        .timer-bg {
-            width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 6px; 
-            overflow: hidden; margin-bottom: 20px; position: relative;
-        }
-        .timer-fill {
-            height: 100%; background: var(--primary); width: 100%; 
-            transition: width 1s linear, background 0.3s;
-        }
+        .quiz-container { max-width: 800px; margin: 0 auto; padding-bottom: 100px; }
+        .timer-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; margin-bottom: 20px; position: relative; }
+        .timer-fill { height: 100%; background: var(--primary); width: 100%; transition: width 1s linear, background 0.3s; }
         .timer-fill.warning { background: var(--warning); }
         .timer-fill.danger { background: var(--danger); }
-
-        .question-text { font-size: 1.25rem; line-height: 1.6; font-weight: 600; margin-bottom: 25px; color: #fff; }
-        
+        .question-text { font-size: 1.15rem; line-height: 1.6; font-weight: 600; margin-bottom: 25px; color: #fff; }
         .choice-btn {
-            display: flex; align-items: center; width: 100%; text-align: left; padding: 18px 20px;
-            margin-bottom: 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border);
-            border-radius: 12px; color: var(--text-muted); cursor: pointer; transition: all 0.2s; position: relative;
+            display: flex; align-items: center; width: 100%; text-align: left; padding: 16px; margin-bottom: 12px; 
+            background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 12px; 
+            color: var(--text-muted); cursor: pointer; transition: all 0.2s; position: relative;
         }
         .choice-btn:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); }
         .choice-btn.disabled { pointer-events: none; opacity: 0.7; }
-        
         .choice-key { 
-            width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.1); color: white;
-            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; margin-right: 15px; flex-shrink: 0;
+            width: 30px; height: 30px; border-radius: 8px; background: rgba(255,255,255,0.1); color: white;
+            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; margin-right: 15px; flex-shrink: 0;
         }
-
         .choice-correct { background: rgba(16, 185, 129, 0.1) !important; border-color: var(--success) !important; color: white !important; }
         .choice-correct .choice-key { background: var(--success); }
-        
         .choice-wrong { background: rgba(239, 68, 68, 0.1) !important; border-color: var(--danger) !important; color: white !important; }
         .choice-wrong .choice-key { background: var(--danger); }
-
-        /* RATIONALE BOX */
-        .rationale-panel {
-            margin-top: 30px; background: #0f1c30; border: 1px solid var(--primary-dim); border-left: 4px solid var(--primary);
-            border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
-        }
-        .rationale-timer-bar {
-            background: rgba(251, 191, 36, 0.05); padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .rationale-content { padding: 25px; line-height: 1.7; font-size: 0.95rem; color: #cbd5e1; }
-
-        /* MOBILE & LOADING */
-        .menu-toggle { display: none; font-size: 1.8rem; color: white; background: none; border: none; cursor: pointer; }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); z-index: 45; opacity: 0; pointer-events: none; transition: 0.3s; }
-        .overlay.active { opacity: 1; pointer-events: auto; }
-
-        @media (max-width: 900px) {
-            .sidebar { position: fixed; left: -100%; height: 100%; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
-            .sidebar.active { left: 0; transform: none; }
-            .menu-toggle { display: block; }
-        }
-
-        .loader {
-            width: 48px; height: 48px; border: 3px solid #FFF; border-bottom-color: var(--primary);
-            border-radius: 50%; display: inline-block; box-sizing: border-box;
-            animation: rotation 1s linear infinite;
-        }
+        
+        .loader { width: 48px; height: 48px; border: 3px solid #FFF; border-bottom-color: var(--primary); border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -317,7 +269,6 @@
     <div class="ambient-bg">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
     </div>
 
     <div id="view-auth" class="auth-wrapper fade-in">
@@ -444,6 +395,7 @@
                 </div>
                 <div id="days-remaining" class="sub-days">90</div>
                 <div style="font-size: 0.8rem; color: var(--text-muted);">Days Remaining</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px;">Expires: <span id="expire-date-txt" style="color:white;">-</span></div>
                 <div style="margin-top: 10px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
                     <div id="days-progress" style="width: 100%; height: 100%; background: var(--primary); border-radius: 2px;"></div>
                 </div>
@@ -490,18 +442,18 @@
                                 <div id="txt-ALL" style="font-size: 4rem; font-weight: 800; line-height: 1; letter-spacing: -2px; text-shadow: 0 0 30px rgba(251, 191, 36, 0.4);">0%</div>
                                 <div style="color: var(--text-muted); margin-top: 5px; font-size: 0.9rem;">Total Questions Answered: <span id="ans-ALL" style="color: white; font-weight: 700;">0</span></div>
                             </div>
-                            <div style="position: relative; width: 180px; height: 180px;">
-                                <svg width="180" height="180" style="transform: rotate(-90deg);">
+                            <div style="position: relative; width: 150px; height: 150px;">
+                                <svg width="150" height="150" style="transform: rotate(-90deg);">
                                     <defs>
                                         <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
                                             <stop offset="0%" style="stop-color:var(--primary);stop-opacity:1" />
                                             <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
                                         </linearGradient>
                                     </defs>
-                                    <circle cx="90" cy="90" r="80" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="15" />
-                                    <circle id="ring-ALL" cx="90" cy="90" r="80" fill="none" stroke="url(#grad1)" stroke-width="15" stroke-dasharray="502" stroke-dashoffset="502" stroke-linecap="round" style="filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.4)); transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);"/>
+                                    <circle cx="75" cy="75" r="65" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12" />
+                                    <circle id="ring-ALL" cx="75" cy="75" r="65" fill="none" stroke="url(#grad1)" stroke-width="12" stroke-dasharray="408" stroke-dashoffset="408" stroke-linecap="round" style="filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.4)); transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);"/>
                                 </svg>
-                                <i class='bx bxs-medal' style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3.5rem; color: rgba(255,255,255,0.8);"></i>
+                                <i class='bx bxs-medal' style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3rem; color: rgba(255,255,255,0.8);"></i>
                             </div>
                         </div>
                     </div>
@@ -512,11 +464,11 @@
                     </div>
 
                     <div class="category-grid">
-                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="40" cy="40" r="35"></circle><circle id="ring-Numerical" class="ring-circle-val" cx="40" cy="40" r="35" style="--c-color: var(--success);"></circle></svg><div class="ring-text" id="txt-Numerical">0%</div></div><div style="font-weight:700; color:var(--success);">Numerical</div><div style="font-size:0.75rem; color:var(--text-muted);">Math & Logic</div></div>
-                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="40" cy="40" r="35"></circle><circle id="ring-Verbal" class="ring-circle-val" cx="40" cy="40" r="35" style="--c-color: var(--warning);"></circle></svg><div class="ring-text" id="txt-Verbal">0%</div></div><div style="font-weight:700; color:var(--warning);">Verbal</div><div style="font-size:0.75rem; color:var(--text-muted);">Grammar & Vocab</div></div>
-                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="40" cy="40" r="35"></circle><circle id="ring-Analytical" class="ring-circle-val" cx="40" cy="40" r="35" style="--c-color: var(--secondary);"></circle></svg><div class="ring-text" id="txt-Analytical">0%</div></div><div style="font-weight:700; color:var(--secondary);">Analytical</div><div style="font-size:0.75rem; color:var(--text-muted);">Problem Solving</div></div>
-                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="40" cy="40" r="35"></circle><circle id="ring-GenInfo" class="ring-circle-val" cx="40" cy="40" r="35" style="--c-color: var(--accent);"></circle></svg><div class="ring-text" id="txt-GenInfo">0%</div></div><div style="font-weight:700; color:var(--accent);">Gen Info</div><div style="font-size:0.75rem; color:var(--text-muted);">Constitution/Laws</div></div>
-                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="40" cy="40" r="35"></circle><circle id="ring-Clerical" class="ring-circle-val" cx="40" cy="40" r="35" style="--c-color: var(--danger);"></circle></svg><div class="ring-text" id="txt-Clerical">0%</div></div><div style="font-weight:700; color:var(--danger);">Clerical</div><div style="font-size:0.75rem; color:var(--text-muted);">Sub-Professional</div></div>
+                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="35" cy="35" r="30"></circle><circle id="ring-Numerical" class="ring-circle-val" cx="35" cy="35" r="30" style="--c-color: var(--success);"></circle></svg><div class="ring-text" id="txt-Numerical">0%</div></div><div style="font-weight:700; color:var(--success);">Numerical</div><div style="font-size:0.75rem; color:var(--text-muted);">Math & Logic</div></div>
+                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="35" cy="35" r="30"></circle><circle id="ring-Verbal" class="ring-circle-val" cx="35" cy="35" r="30" style="--c-color: var(--warning);"></circle></svg><div class="ring-text" id="txt-Verbal">0%</div></div><div style="font-weight:700; color:var(--warning);">Verbal</div><div style="font-size:0.75rem; color:var(--text-muted);">Grammar & Vocab</div></div>
+                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="35" cy="35" r="30"></circle><circle id="ring-Analytical" class="ring-circle-val" cx="35" cy="35" r="30" style="--c-color: var(--secondary);"></circle></svg><div class="ring-text" id="txt-Analytical">0%</div></div><div style="font-weight:700; color:var(--secondary);">Analytical</div><div style="font-size:0.75rem; color:var(--text-muted);">Problem Solving</div></div>
+                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="35" cy="35" r="30"></circle><circle id="ring-GenInfo" class="ring-circle-val" cx="35" cy="35" r="30" style="--c-color: var(--accent);"></circle></svg><div class="ring-text" id="txt-GenInfo">0%</div></div><div style="font-weight:700; color:var(--accent);">Gen Info</div><div style="font-size:0.75rem; color:var(--text-muted);">Constitution/Laws</div></div>
+                        <div class="cat-card"><div class="ring-container"><svg class="ring-svg"><circle class="ring-circle-bg" cx="35" cy="35" r="30"></circle><circle id="ring-Clerical" class="ring-circle-val" cx="35" cy="35" r="30" style="--c-color: var(--danger);"></circle></svg><div class="ring-text" id="txt-Clerical">0%</div></div><div style="font-weight:700; color:var(--danger);">Clerical</div><div style="font-size:0.75rem; color:var(--text-muted);">Sub-Professional</div></div>
                     </div>
                 </div>
 
@@ -546,9 +498,7 @@
                     </div>
                 </div>
 
-                <div id="view-quiz" class="hidden fade-in quiz-container">
-                    </div>
-
+                <div id="view-quiz" class="hidden fade-in quiz-container"></div>
             </div>
         </main>
     </div>
@@ -556,7 +506,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDoc, getDocs, doc, setDoc, updateDoc, query, where, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDoc, getDocs, doc, setDoc, updateDoc, query, where, limit, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBY4msSow0k_2iP0IJeMZH8Qbzdj5lXeAo",
@@ -578,10 +528,9 @@
         let selectedCategory = '';
         let currentUserUID = null;
         let userStats = {};
-        let mySessionId = null; // Store current tab's session ID
-        let sessionUnsubscribe = null; // Firestore listener
+        let mySessionId = null;
+        let sessionUnsubscribe = null;
         
-        // Timer Variables
         let questionTimerInterval;
         let nextQuestionInterval;
         let autoRedirectInterval; 
@@ -589,7 +538,7 @@
         const QUESTION_TIME_LIMIT = 60; 
         const NEXT_TIME_LIMIT = 5;      
 
-        // --- AUTH LOGIC ---
+        // --- AUTH & LOGIC ---
         const loginEmail = document.getElementById('inp-email');
         const loginPass = document.getElementById('inp-pass');
         const regEmail = document.getElementById('reg-email');
@@ -598,25 +547,21 @@
         const regSenderName = document.getElementById('reg-sender-name');
         const regSenderNum = document.getElementById('reg-sender-num');
         
-        // Login Logic with Double Login Check
+        // 1. LOGIN LOGIC
         document.getElementById('btn-login').addEventListener('click', async () => {
             try {
-                // 1. Authenticate first (Firebase allows this even if double logged in)
                 const userCred = await signInWithEmailAndPassword(auth, loginEmail.value, loginPass.value);
                 const uid = userCred.user.uid;
                 
-                // 2. Check Database for Active Session
+                // Double Login Check
                 const userDoc = await getDoc(doc(db, "users", uid));
                 if(userDoc.exists()) {
                     const data = userDoc.data();
                     
-                    // IF ALREADY ACTIVE SOMEWHERE ELSE
                     if(data.isSessionActive && data.currentSessionId) {
-                        // Prevent automatic entry, show Conflict Modal
                         document.getElementById('view-conflict').classList.remove('hidden');
                         document.getElementById('view-auth').classList.add('hidden');
                     } else {
-                        // All good, claim the session
                         establishSession(uid);
                     }
                 }
@@ -626,38 +571,32 @@
             }
         });
 
-        // FORCE LOGIN (Kicking other user)
         window.forceSessionClaim = async () => {
              const user = auth.currentUser;
              if(user) {
                  await establishSession(user.uid);
                  document.getElementById('view-conflict').classList.add('hidden');
-                 // Auth State Observer will handle the rest
              }
         };
 
-        // HELPER: Establish Session ID
         async function establishSession(uid) {
             mySessionId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
             
+            // NOTE: Here we set isSessionActive to true immediately
             await updateDoc(doc(db, "users", uid), {
                 isSessionActive: true,
                 currentSessionId: mySessionId
             });
             
-            // Start listening for kicks
             monitorSession(uid);
         }
 
-        // MONITOR: Check if I get kicked
         function monitorSession(uid) {
-            if(sessionUnsubscribe) sessionUnsubscribe(); // Clear old listener
+            if(sessionUnsubscribe) sessionUnsubscribe();
             
             sessionUnsubscribe = onSnapshot(doc(db, "users", uid), (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    
-                    // If session ID in DB is different from mine, someone else logged in!
                     if (data.isSessionActive && data.currentSessionId !== mySessionId) {
                         handleRemoteKick();
                     }
@@ -666,14 +605,14 @@
         }
 
         function handleRemoteKick() {
-            signOut(auth); // Sign out from Firebase locally
+            signOut(auth);
             ['view-dashboard', 'view-topics', 'view-count', 'view-quiz', 'app-layout'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
-            document.getElementById('view-kicked').classList.remove('hidden'); // Show "You got kicked" msg
+            document.getElementById('view-kicked').classList.remove('hidden'); 
         }
 
-        // Register
+        // 2. REGISTRATION LOGIC
         document.getElementById('btn-register').addEventListener('click', async () => {
             if(regPass.value.length < 6) return document.getElementById('reg-msg').innerText = "Password too short.";
             if(!regRef.value || !regSenderName.value || !regSenderNum.value) return document.getElementById('reg-msg').innerText = "All payment fields are required.";
@@ -686,11 +625,12 @@
                     gcashReference: regRef.value, 
                     senderName: regSenderName.value,
                     senderNumber: regSenderNum.value,
-                    status: "pending",
+                    status: "pending", 
                     createdAt: new Date(),
                     subscriptionStart: null, 
+                    subscriptionExpired: null,
                     stats: {},
-                    isSessionActive: false, // Init session vars
+                    isSessionActive: false,
                     currentSessionId: null
                 });
                 alert("Registration submitted! Please wait for approval.");
@@ -699,10 +639,9 @@
             }
         });
 
-        // Logout - Clean up session
+        // 3. LOGOUT
         window.forceLogout = async () => {
             if(currentUserUID) {
-                // Set session inactive in DB
                 try {
                     await updateDoc(doc(db, "users", currentUserUID), {
                         isSessionActive: false,
@@ -712,13 +651,13 @@
             }
             if(sessionUnsubscribe) sessionUnsubscribe();
             signOut(auth);
-            location.reload(); // Reload to clear JS states
+            location.reload(); 
         };
         
         document.getElementById('btn-logout').addEventListener('click', () => window.forceLogout());
         document.getElementById('btn-force-logout').addEventListener('click', () => window.forceLogout());
 
-        // Auth State Observer
+        // 4. AUTH OBSERVER - MAIN LOGIC
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUserUID = user.uid;
@@ -728,24 +667,37 @@
                     const userData = userSnap.data();
                     
                     if (userData.status === 'active') {
-                        // CHECK IF I SHOULD BE HERE (In case of page refresh)
+
+                        // --- AUTO-FIX: FILL NULL DATES ON LOGIN ---
+                        if (!userData.subscriptionStart || !userData.subscriptionExpired) {
+                            console.log("Fixing null dates for user...");
+                            const now = new Date();
+                            const expiry = new Date();
+                            expiry.setDate(now.getDate() + 90); // +90 Days
+
+                            await updateDoc(doc(db, "users", user.uid), {
+                                subscriptionStart: now,
+                                subscriptionExpired: expiry
+                            });
+                            // Reload local data locally to reflect instantly
+                            userData.subscriptionStart = Timestamp.fromDate(now);
+                            userData.subscriptionExpired = Timestamp.fromDate(expiry);
+                        }
+
+                        // --- SESSION HANDLING ---
                         if(!mySessionId) {
-                            // If refreshed page, reclaim session (simple version)
                              mySessionId = userData.currentSessionId; 
-                             // If session ID is null in DB, generate new
-                             if(!mySessionId) establishSession(user.uid);
+                             if(!mySessionId || !userData.isSessionActive) establishSession(user.uid);
                              else monitorSession(user.uid); 
                         }
 
                         userStats = userData.stats || {};
                         document.getElementById('user-name').innerText = user.email.split('@')[0];
                         
-                        // HIDE AUTH SCREENS
                         document.getElementById('view-auth').classList.add('hidden');
                         document.getElementById('view-pending').classList.add('hidden');
                         document.getElementById('view-conflict').classList.add('hidden');
 
-                        // Check if we just logged in (show intro) or refreshed (skip intro)
                         if(!document.getElementById('view-intro').classList.contains('intro-shown')) {
                              playWelcomeAnimation(userData);
                              document.getElementById('view-intro').classList.add('intro-shown');
@@ -770,7 +722,7 @@
             }
         });
 
-        // --- WELCOME ANIMATION SEQUENCE ---
+        // --- ANIMATIONS & UI ---
         function playWelcomeAnimation(userData) {
             const introView = document.getElementById('view-intro');
             const introMsg = document.getElementById('intro-msg');
@@ -805,15 +757,31 @@
                         }, 800);
                     }
                 }, 1000); 
-
             }, 2500);
         }
 
-        // --- SUBSCRIPTION LOGIC (90 DAYS) ---
+        // --- SUBSCRIPTION CHECKER (UPDATED WITH EXPIRE DATE) ---
         function checkSubscription(userData) {
-            let startDate = userData.subscriptionStart ? userData.subscriptionStart.toDate() : new Date();
-            let expiryDate = new Date(startDate);
-            expiryDate.setDate(startDate.getDate() + 90);
+            let startDate, expiryDate;
+
+            // Handle potential Timestamp or Date object
+            if (userData.subscriptionStart && typeof userData.subscriptionStart.toDate === 'function') {
+                startDate = userData.subscriptionStart.toDate();
+            } else if (userData.subscriptionStart) {
+                startDate = new Date(userData.subscriptionStart); // Fallback if regular date string
+            } else {
+                startDate = new Date(); // Fallback to now
+            }
+
+            if (userData.subscriptionExpired && typeof userData.subscriptionExpired.toDate === 'function') {
+                expiryDate = userData.subscriptionExpired.toDate();
+            } else if (userData.subscriptionExpired) {
+                expiryDate = new Date(userData.subscriptionExpired);
+            } else {
+                // Calculation Fallback if DB missing expiry
+                expiryDate = new Date(startDate);
+                expiryDate.setDate(startDate.getDate() + 90);
+            }
             
             let today = new Date();
             let timeDiff = expiryDate.getTime() - today.getTime();
@@ -822,8 +790,11 @@
             if(daysLeft < 0) daysLeft = 0;
 
             document.getElementById('days-remaining').innerText = daysLeft;
+            document.getElementById('expire-date-txt').innerText = expiryDate.toLocaleDateString();
             
             let percentage = (daysLeft / 90) * 100;
+            if(percentage > 100) percentage = 100;
+            
             document.getElementById('days-progress').style.width = percentage + "%";
             
             const daysText = document.getElementById('days-remaining');
@@ -834,7 +805,7 @@
             }
         }
 
-        // --- NAVIGATION & UI ---
+        // --- NAVIGATION HELPERS ---
         window.toggleAuthMode = () => {
             document.getElementById('form-login').classList.toggle('hidden');
             document.getElementById('form-register').classList.toggle('hidden');
@@ -865,7 +836,7 @@
             document.getElementById(id).classList.remove('hidden');
         }
 
-        // --- QUIZ LOGIC ---
+        // --- QUIZ FUNCTIONS (Standard) ---
         window.selectTopic = (topic) => {
             selectedCategory = topic;
             navTo('count');
@@ -959,32 +930,22 @@
         function startQuestionTimer() {
             let timeLeft = QUESTION_TIME_LIMIT;
             const timerFill = document.getElementById('q-timer-fill');
-            
             timerFill.style.width = '100%';
             timerFill.className = 'timer-fill'; 
-
             questionTimerInterval = setInterval(() => {
                 timeLeft--;
                 const percentage = (timeLeft / QUESTION_TIME_LIMIT) * 100;
                 timerFill.style.width = `${percentage}%`;
-
                 if (timeLeft <= 10) timerFill.classList.add('warning');
                 if (timeLeft <= 5) timerFill.classList.add('danger');
-
-                if (timeLeft <= 0) {
-                    clearInterval(questionTimerInterval);
-                    handleTimeUp(); 
-                }
+                if (timeLeft <= 0) { clearInterval(questionTimerInterval); handleTimeUp(); }
             }, 1000);
         }
 
-        function handleTimeUp() {
-            checkAnswer(null, null);
-        }
+        function handleTimeUp() { checkAnswer(null, null); }
 
         window.checkAnswer = (selected, btnElement) => {
             clearInterval(questionTimerInterval);
-
             const buttons = document.querySelectorAll('.choice-btn');
             buttons.forEach(b => b.classList.add('disabled'));
             buttons.forEach(b => b.onclick = null);
@@ -1002,10 +963,7 @@
                     btnElement.classList.add('choice-wrong');
                 }
             }
-
-            buttons.forEach(b => {
-                if(b.innerText.includes(q.correct)) b.classList.add('choice-correct');
-            });
+            buttons.forEach(b => { if(b.innerText.includes(q.correct)) b.classList.add('choice-correct'); });
 
             document.getElementById('rationale-area').innerHTML = `
                 <div class="rationale-panel fade-in">
@@ -1013,13 +971,9 @@
                     <div class="rationale-content">${q.rationale || "No explanation provided."}</div>
                 </div>
             `;
-
-            const nextBtn = document.getElementById('next-btn');
-            nextBtn.classList.remove('hidden');
-
+            document.getElementById('next-btn').classList.remove('hidden');
             updateLocalStats(q.category, isCorrect);
             updateLocalStats('ALL', isCorrect);
-
             startNextQuestionTimer();
         };
 
@@ -1027,7 +981,6 @@
             let nextTimeLeft = NEXT_TIME_LIMIT;
             const nextBtn = document.getElementById('next-btn');
             nextBtn.innerHTML = `Next Question (${nextTimeLeft}s) <i class='bx bx-right-arrow-alt'></i>`;
-
             nextQuestionInterval = setInterval(() => {
                 nextTimeLeft--;
                 if(nextTimeLeft > 0) {
@@ -1042,88 +995,60 @@
         window.nextQuestion = () => {
             clearInterval(nextQuestionInterval);
             currentIndex++;
-            if (currentIndex < currentQuestions.length) {
-                renderQuestion();
-            } else {
-                showResults();
-            }
+            if (currentIndex < currentQuestions.length) { renderQuestion(); } else { showResults(); }
         };
 
         function showResults() {
             clearInterval(questionTimerInterval);
             clearInterval(nextQuestionInterval);
-            
             saveAndExit(false); 
-
             const percentage = Math.round((score / currentQuestions.length) * 100);
-            
             let autoSeconds = 5;
-
             document.getElementById('view-quiz').innerHTML = `
                 <div class="card fade-in" style="text-align:center; padding:40px;">
                     <div style="font-size:3rem; color:var(--primary); margin-bottom:10px;"><i class='bx bx-check-shield'></i></div>
                     <h2 style="color: white; margin-bottom:10px;">SESSION COMPLETE</h2>
                     <div style="font-size:4rem; font-weight:800; color:var(--primary); text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);">${percentage}%</div>
                     <p style="color:var(--text-muted); margin-bottom:30px;">You got ${score} out of ${currentQuestions.length}</p>
-                    
                     <div style="background: rgba(255,255,255,0.05); padding:15px; border-radius:12px; margin-bottom:20px;">
                         <p id="redirect-msg" style="color:var(--text-main); font-family:var(--font-mono);">
                             Returning to Dashboard in <span style="color:var(--primary); font-weight:bold; font-size:1.2rem;">${autoSeconds}</span>...
                         </p>
                     </div>
-
                     <button onclick="navTo('dashboard')" class="btn btn-outline">Return Now</button>
                 </div>
             `;
-
             autoRedirectInterval = setInterval(() => {
                 autoSeconds--;
                 const msgEl = document.getElementById('redirect-msg');
-                if(msgEl) {
-                    msgEl.innerHTML = `Returning to Dashboard in <span style="color:var(--primary); font-weight:bold; font-size:1.2rem;">${autoSeconds}</span>...`;
-                }
-
-                if(autoSeconds <= 0) {
-                    clearInterval(autoRedirectInterval);
-                    navTo('dashboard'); 
-                }
+                if(msgEl) msgEl.innerHTML = `Returning to Dashboard in <span style="color:var(--primary); font-weight:bold; font-size:1.2rem;">${autoSeconds}</span>...`;
+                if(autoSeconds <= 0) { clearInterval(autoRedirectInterval); navTo('dashboard'); }
             }, 1000);
         }
 
         function updateLocalStats(cat, correct) {
-            if (!userStats[cat]) {
-                userStats[cat] = { total: 0, correct: 0 };
-            }
+            if (!userStats[cat]) { userStats[cat] = { total: 0, correct: 0 }; }
             userStats[cat].total++;
             if (correct) userStats[cat].correct++;
         }
 
         window.saveAndExit = async (shouldNavigate = true) => {
             if(currentUserUID) {
-                try {
-                    await updateDoc(doc(db, "users", currentUserUID), {
-                        stats: userStats
-                    });
-                    if(shouldNavigate) navTo('dashboard');
-                } catch (e) {
-                    console.error("Error saving stats", e);
-                }
+                try { await updateDoc(doc(db, "users", currentUserUID), { stats: userStats }); if(shouldNavigate) navTo('dashboard'); } catch (e) { console.error("Error saving stats", e); }
             }
         };
 
         window.loadStatsUI = () => {
             const stats = userStats; 
             const cats = ['Numerical', 'Verbal', 'Analytical', 'GenInfo', 'Clerical', 'ALL'];
-            
             cats.forEach(c => {
                 if(stats[c] && stats[c].total > 0) {
                     const pct = Math.round((stats[c].correct / stats[c].total) * 100) || 0;
                     const ring = document.getElementById(`ring-${c}`);
                     const txt = document.getElementById(`txt-${c}`);
-                    
                     if(ring) {
                         if(c === 'ALL') {
-                             const mainOffset = 502 - (502 * pct) / 100;
+                             const mainOffset = 408 - (408 * pct) / 100;
                              ring.style.strokeDashoffset = mainOffset;
                              txt.innerText = pct + "%";
                              document.getElementById('ans-ALL').innerText = stats[c].total;
@@ -1136,10 +1061,7 @@
                 } else {
                     const ring = document.getElementById(`ring-${c}`);
                     const txt = document.getElementById(`txt-${c}`);
-                    if(ring) {
-                        ring.style.strokeDashoffset = c === 'ALL' ? 502 : 220;
-                        txt.innerText = "0%";
-                    }
+                    if(ring) { ring.style.strokeDashoffset = c === 'ALL' ? 408 : 220; txt.innerText = "0%"; }
                     if(c === 'ALL') document.getElementById('ans-ALL').innerText = "0";
                 }
             });
@@ -1152,7 +1074,6 @@
                 loadStatsUI();
             }
         };
-
     </script>
 </body>
 </html>
