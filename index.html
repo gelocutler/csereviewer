@@ -441,6 +441,9 @@
                                 <h4 style="color: var(--primary); font-family: var(--font-mono); letter-spacing: 1px; margin-bottom: 8px;">OVERALL MASTERY</h4>
                                 <div id="txt-ALL" style="font-size: 4rem; font-weight: 800; line-height: 1; letter-spacing: -2px; text-shadow: 0 0 30px rgba(251, 191, 36, 0.4);">0%</div>
                                 <div style="color: var(--text-muted); margin-top: 5px; font-size: 0.9rem;">Total Questions Answered: <span id="ans-ALL" style="color: white; font-weight: 700;">0</span></div>
+                                <div id="readiness-indicator" style="margin-top: 15px; font-weight: 700; color: var(--success); text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">
+                                    Building Foundations
+                                </div>
                             </div>
                             <div style="position: relative; width: 150px; height: 150px;">
                                 <svg width="150" height="150" style="transform: rotate(-90deg);">
@@ -506,7 +509,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDoc, getDocs, doc, setDoc, updateDoc, query, where, limit, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDoc, getDocs, doc, setDoc, updateDoc, query, where, limit, onSnapshot, Timestamp, arrayUnion } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBY4msSow0k_2iP0IJeMZH8Qbzdj5lXeAo",
@@ -528,6 +531,7 @@
         let selectedCategory = '';
         let currentUserUID = null;
         let userStats = {};
+        let seenQuestions = []; // Holds IDs of questions user has seen
         let mySessionId = null;
         let sessionUnsubscribe = null;
         
@@ -630,6 +634,7 @@
                     subscriptionStart: null, 
                     subscriptionExpired: null,
                     stats: {},
+                    seenQuestions: [], // Initialize empty seen list
                     isSessionActive: false,
                     currentSessionId: null
                 });
@@ -692,6 +697,8 @@
                         }
 
                         userStats = userData.stats || {};
+                        seenQuestions = userData.seenQuestions || []; // Load seen list
+
                         document.getElementById('user-name').innerText = user.email.split('@')[0];
                         
                         document.getElementById('view-auth').classList.add('hidden');
@@ -716,6 +723,7 @@
             } else {
                 currentUserUID = null;
                 userStats = {};
+                seenQuestions = [];
                 showView('view-auth');
                 document.getElementById('app-layout').classList.add('hidden');
                 document.getElementById('view-pending').classList.add('hidden');
@@ -836,7 +844,7 @@
             document.getElementById(id).classList.remove('hidden');
         }
 
-        // --- QUIZ FUNCTIONS (Standard) ---
+        // --- QUIZ FUNCTIONS (SMART NON-REPEATING LOGIC) ---
         window.selectTopic = (topic) => {
             selectedCategory = topic;
             navTo('count');
@@ -851,28 +859,74 @@
             currentIndex = 0;
 
             try {
+                // 1. Fetch ALL questions for the category (or all if ALL)
                 let qRef = collection(db, "questions");
                 let qQuery;
 
                 if (selectedCategory === 'ALL') {
-                    qQuery = query(qRef, limit(limitCount * 3)); 
+                    qQuery = query(qRef); 
                 } else {
-                    qQuery = query(qRef, where("category", "==", selectedCategory), limit(limitCount));
+                    qQuery = query(qRef, where("category", "==", selectedCategory));
                 }
 
                 const querySnapshot = await getDocs(qQuery);
+                let allPossibleQuestions = [];
                 querySnapshot.forEach((doc) => {
-                    currentQuestions.push({ id: doc.id, ...doc.data() });
+                    allPossibleQuestions.push({ id: doc.id, ...doc.data() });
                 });
 
-                currentQuestions.sort(() => Math.random() - 0.5);
-                currentQuestions = currentQuestions.slice(0, limitCount);
-
-                if (currentQuestions.length === 0) {
-                    alert("No questions found for this category yet. Please try another.");
+                if (allPossibleQuestions.length === 0) {
+                    alert("No questions found for this category yet.");
                     navTo('topics');
                     document.getElementById('view-loading').classList.add('hidden');
                     return;
+                }
+
+                // 2. Filter out questions that are in user's 'seenQuestions'
+                let unseenQuestions = allPossibleQuestions.filter(q => !seenQuestions.includes(q.id));
+
+                // 3. Logic: If unseen is empty or less than requested limit, Reset or Fill
+                if (unseenQuestions.length === 0) {
+                    // Scenario: User has finished all questions in this set
+                    alert("Amazing! You've answered all available questions in this category. We are resetting the deck for you to practice again.");
+                    
+                    // Clear seen list locally and in DB for this set logic
+                    // Note: Ideally we filter seen per category, but for this simple app we track all IDs globally. 
+                    // To properly reset, we will remove IDs belonging to this category from the global seen list.
+                    const idsToKeep = seenQuestions.filter(id => !allPossibleQuestions.some(aq => aq.id === id));
+                    seenQuestions = idsToKeep; // Reset local
+                    
+                    // Update DB with reset list
+                    await updateDoc(doc(db, "users", currentUserUID), { seenQuestions: idsToKeep });
+                    
+                    // All questions are now unseen
+                    unseenQuestions = allPossibleQuestions;
+                }
+
+                // Shuffle unseen questions
+                unseenQuestions.sort(() => Math.random() - 0.5);
+
+                // 4. Select questions (Fill up to limitCount)
+                // If we have enough unseen, grab them. If not, grab all unseen, then fill with some seen if really needed (or just show what's left).
+                // Per user request "hanggat meron pang tanong yun priority", so we just take from unseen.
+                
+                if (unseenQuestions.length < limitCount) {
+                     // Take all remaining unseen
+                     currentQuestions = unseenQuestions;
+                } else {
+                     // Take limitCount
+                     currentQuestions = unseenQuestions.slice(0, limitCount);
+                }
+
+                // 5. Update 'Seen' list in DB immediately so they don't appear in next session even if this one isn't finished
+                const newSeenIds = currentQuestions.map(q => q.id);
+                // Update local
+                seenQuestions = [...seenQuestions, ...newSeenIds];
+                // Update DB (using arrayUnion to add without overwriting)
+                if(newSeenIds.length > 0) {
+                    await updateDoc(doc(db, "users", currentUserUID), {
+                        seenQuestions: arrayUnion(...newSeenIds)
+                    });
                 }
 
                 document.getElementById('view-loading').classList.add('hidden');
@@ -1038,21 +1092,40 @@
             }
         };
 
+        // --- UPDATED DASHBOARD STATS (WITH READINESS INDICATOR) ---
         window.loadStatsUI = () => {
             const stats = userStats; 
             const cats = ['Numerical', 'Verbal', 'Analytical', 'GenInfo', 'Clerical', 'ALL'];
+            
             cats.forEach(c => {
                 if(stats[c] && stats[c].total > 0) {
                     const pct = Math.round((stats[c].correct / stats[c].total) * 100) || 0;
                     const ring = document.getElementById(`ring-${c}`);
                     const txt = document.getElementById(`txt-${c}`);
+                    
                     if(ring) {
                         if(c === 'ALL') {
+                             // Handle Overall Ring
                              const mainOffset = 408 - (408 * pct) / 100;
                              ring.style.strokeDashoffset = mainOffset;
                              txt.innerText = pct + "%";
                              document.getElementById('ans-ALL').innerText = stats[c].total;
+
+                             // --- NEW: Readiness Indicator Logic ---
+                             const readinessEl = document.getElementById('readiness-indicator');
+                             if(pct >= 80) {
+                                 readinessEl.innerText = "YOU ARE EXAM READY! 🏆";
+                                 readinessEl.style.color = "var(--primary)";
+                             } else if (pct >= 50) {
+                                 readinessEl.innerText = "Getting There! Keep Grinding 🚀";
+                                 readinessEl.style.color = "var(--success)";
+                             } else {
+                                 readinessEl.innerText = "Building Foundations";
+                                 readinessEl.style.color = "var(--text-muted)";
+                             }
+
                         } else {
+                            // Handle Category Rings
                             const offset = 220 - (220 * pct) / 100; 
                             ring.style.strokeDashoffset = offset;
                             txt.innerText = pct + "%";
@@ -1062,15 +1135,23 @@
                     const ring = document.getElementById(`ring-${c}`);
                     const txt = document.getElementById(`txt-${c}`);
                     if(ring) { ring.style.strokeDashoffset = c === 'ALL' ? 408 : 220; txt.innerText = "0%"; }
-                    if(c === 'ALL') document.getElementById('ans-ALL').innerText = "0";
+                    if(c === 'ALL') {
+                        document.getElementById('ans-ALL').innerText = "0";
+                        document.getElementById('readiness-indicator').innerText = "Start Reviewing";
+                        document.getElementById('readiness-indicator').style.color = "var(--text-muted)";
+                    }
                 }
             });
         };
 
         window.resetStats = async () => {
-            if(confirm("Reset all mastery progress? This deletes your history.")) {
+            if(confirm("Reset all mastery progress AND question history? This deletes everything.")) {
                 userStats = {};
-                await saveAndExit();
+                seenQuestions = []; // Reset seen list too
+                await updateDoc(doc(db, "users", currentUserUID), { 
+                    stats: {}, 
+                    seenQuestions: [] 
+                });
                 loadStatsUI();
             }
         };
