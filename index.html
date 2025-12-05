@@ -289,12 +289,19 @@
 
         <div id="form-register" class="card auth-card hidden">
             <h2 style="text-align: center; margin-bottom: 5px; color: var(--success);">REGISTER</h2>
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Step 1: Send GCash Payment</p>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">
+                Step 1: Secure Payment
+            </p>
             
             <div style="background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 8px; border: 1px dashed var(--success); margin-bottom: 20px;">
                 <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--success); font-weight: bold;">Send to GCash</div>
                 <div style="font-size: 1.2rem; font-family: var(--font-mono); color: white; margin: 5px 0;">0948 374 8304</div>
-                <div style="font-size: 0.8rem; color: var(--text-muted);">Name: A...LO</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Name: A...LO</div>
+                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size: 0.8rem; color: #fff;">AMOUNT:</span>
+                    <span style="font-size: 1.1rem; font-weight: 800; color: var(--primary);">₱349.00</span>
+                </div>
+                <div style="text-align: right; font-size: 0.7rem; color: var(--text-muted);">VALID FOR 90 DAYS</div>
             </div>
 
             <div class="input-group">
@@ -616,7 +623,7 @@
             document.getElementById('view-kicked').classList.remove('hidden'); 
         }
 
-        // 2. REGISTRATION LOGIC
+        // 2. REGISTRATION LOGIC - UPDATED
         document.getElementById('btn-register').addEventListener('click', async () => {
             if(regPass.value.length < 6) return document.getElementById('reg-msg').innerText = "Password too short.";
             if(!regRef.value || !regSenderName.value || !regSenderNum.value) return document.getElementById('reg-msg').innerText = "All payment fields are required.";
@@ -630,6 +637,8 @@
                     senderName: regSenderName.value,
                     senderNumber: regSenderNum.value,
                     status: "pending", 
+                    plan: "CSE_ELITE_90_DAYS", // Added Plan Indicator
+                    pricePaid: 349, // Added Price Indicator
                     createdAt: new Date(),
                     subscriptionStart: null, 
                     subscriptionExpired: null,
@@ -674,11 +683,12 @@
                     if (userData.status === 'active') {
 
                         // --- AUTO-FIX: FILL NULL DATES ON LOGIN ---
+                        // Ensure user gets their 90 days upon first activation
                         if (!userData.subscriptionStart || !userData.subscriptionExpired) {
-                            console.log("Fixing null dates for user...");
+                            console.log("Fixing null dates for user (90 Days Plan)...");
                             const now = new Date();
                             const expiry = new Date();
-                            expiry.setDate(now.getDate() + 90); // +90 Days
+                            expiry.setDate(now.getDate() + 90); // +90 Days Validity
 
                             await updateDoc(doc(db, "users", user.uid), {
                                 subscriptionStart: now,
